@@ -1,0 +1,14 @@
+@import '../../theme/index';
+
+.el-form {
+  .el-form-item {
+    .el-form-item__label {
+      font-size: 12px;
+    }
+    .el-form-item__content {
+      .el-select {
+        width: 100%;
+      }
+    }
+  }
+}

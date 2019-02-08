@@ -1,0 +1,6 @@
+@import '../../theme/index';
+
+.el-message-box {
+  border: 1px solid $global-main-color;
+  background-color: $global-bg-color-popover;
+}

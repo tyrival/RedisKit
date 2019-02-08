@@ -1,0 +1,35 @@
+@import '../../theme/index';
+
+.el-upload {
+  .el-upload-dragger {
+    background-color: transparent;
+    border-color: $global-border-color-light;
+  }
+}
+
+.el-upload-list__item-name {
+  font-size: 12px;
+}
+
+.el-upload-list__item {
+  font-size: 12px;
+}
+
+.el-upload-list__item {
+  &.is-uploading {
+    .el-progress {
+      &.el-progress--line {
+        .el-progress-bar {
+          .el-progress-bar__outer {
+            border-color: $global-main-color;
+          }
+        }
+
+        .el-progress__text {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+

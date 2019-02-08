@@ -1,0 +1,21 @@
+@import '../../theme/index';
+
+.el-color-picker {
+  .el-color-picker__trigger {
+    border: 1px solid $global-border-color-base;
+
+    &:hover {
+      border: 1px solid $global-border-color-light
+    }
+  }
+}
+
+/* DatePicker, Select */
+.el-picker-panel, .el-select-dropdown {
+  &.el-popper[x-placement^=bottom] {
+    .popper__arrow {
+      border-bottom-color: $global-border-color-light;
+      top: -7px;
+    }
+  }
+}

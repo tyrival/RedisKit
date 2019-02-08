@@ -1,0 +1,40 @@
+.el-progress {
+  &.el-progress--circle {
+    width: 100%;
+    height: 100%;
+
+    .el-progress-circle {
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+
+  &.el-progress--line {
+    white-space: nowrap;
+    border-width: 0px;
+    border-style: solid;
+    border-color: inherit;
+    color: inherit;
+    font-size: inherit;
+  }
+
+  .el-progress-bar {
+    border-width: 0;
+    border-color: inherit;
+    color: inherit;
+    font-size: inherit;
+
+    .el-progress-bar__outer {
+      border-width: 2px;
+      border-style: solid;
+      border-color: inherit;
+      background-color: rgba(0, 0, 0, 0);
+    }
+  }
+
+  .el-progress-bar__innerText,
+  .el-progress__text {
+    color: inherit !important;
+    font-size: inherit !important;
+  }
+}

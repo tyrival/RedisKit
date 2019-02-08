@@ -1,0 +1,17 @@
+@import '../../theme/index';
+
+.el-autocomplete {
+  width: 100%;
+  height: 100%;
+  .el-input {
+    height: 100%;
+    border-color: inherit;
+    font-size: inherit;
+    color: inherit;
+    .el-input__inner {
+      background-color: inherit;
+      border-width: 1px;
+      color: inherit;
+    }
+  }
+}

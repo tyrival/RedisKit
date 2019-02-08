@@ -1,0 +1,41 @@
+@import '../../theme/index';
+
+.el-tooltip__popper {
+  &.is-dark {
+    background: $global-bg-color;
+    color: $global-main-color;
+    border: 1px solid $global-main-color;
+  }
+  &[x-placement^="top"] {
+    .popper__arrow {
+      border-top-color: $global-main-color;
+      &::after {
+        border-top-color: $global-main-color;
+      }
+    }
+  }
+  &[x-placement^="left"] {
+    .popper__arrow {
+      border-left-color: $global-main-color;
+      &::after {
+        border-left-color: $global-main-color;
+      }
+    }
+  }
+  &[x-placement^="right"] {
+    .popper__arrow {
+      border-right-color: $global-main-color;
+      &::after {
+        border-right-color: $global-main-color;
+      }
+    }
+  }
+  &[x-placement^="bottom"] {
+    .popper__arrow {
+      border-bottom-color: $global-main-color;
+      &::after {
+        border-bottom-color: $global-main-color;
+      }
+    }
+  }
+}

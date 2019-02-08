@@ -1,0 +1,18 @@
+@import '../../theme/index';
+
+.el-dialog {
+  border-top: 2px solid $global-main-color;
+
+  .el-dialog__header {
+    padding: 10px 10px 10px 20px;
+
+    .el-dialog__title {
+      font-size: 16px;
+      color: $global-font-color-regular;
+    }
+    .el-dialog__headerbtn {
+      top: 10px;
+      right: 10px;
+    }
+  }
+}
