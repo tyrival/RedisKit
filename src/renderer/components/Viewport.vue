@@ -19,8 +19,10 @@
     data () {
       return {
         servers: {
+          // 当前服务器索引
           index: null,
-          partitionIndex: null,
+          // 当前数据库索引
+          dbIndex: null,
           connection: null,
           storage: {
             index: null,
@@ -41,7 +43,7 @@
               'host': 'localhost',
               'port': 6379,
               'password': '',
-              'partitions': []
+              'dbs': []
             }
           ]
         }

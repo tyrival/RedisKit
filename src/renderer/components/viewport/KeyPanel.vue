@@ -7,9 +7,9 @@
 			          clearable>
 			</el-input>
 		</div>
-		<div class="tab-partition">
+		<div class="tab-db">
 			<el-tabs v-if="showPartitionTab()"
-			         v-model="servers.partitionIndex"
+			         v-model="servers.dbIndex"
 			         type="card"
 			         @tab-click="selectPartition">
 				<template v-for="(item, i) in getPartitions()">
@@ -60,14 +60,14 @@
         return false
       },
       selectPartition (tab, event) {
-        this.servers.partitionIndex = tab.index
+        this.servers.dbIndex = tab.index
         this.loadKeys()
       },
       loadKeys () {
         this.servers.storage.data = []
         this.servers.storage.index = null
         let server = this.servers.list[this.servers.index]
-        server.db = this.servers.partitionIndex.toString()
+        server.db = this.servers.dbIndex.toString()
         this.servers.connection = new Redis(server)
         // 查询所有key
         this.servers.connection.keys(['*'], (_, reply) => {
@@ -112,10 +112,10 @@
         if (index === null || index === undefined) {
           return
         }
-        return this.servers.list[this.servers.index].partitions
+        return this.servers.list[this.servers.index].dbs
       },
       showKeyList () {
-        if (this.servers.index !== null && this.servers.partitionIndex != null) {
+        if (this.servers.index !== null && this.servers.dbIndex != null) {
           return true
         }
         return false
@@ -144,8 +144,7 @@
       }
     },
     watch: {
-      'servers.partitionIndex': function (val) {
-        console.log('watch')
+      'servers.dbIndex': function (val) {
         this.loadKeys()
       }
     }

@@ -108,18 +108,18 @@
           if (!count) {
             return
           }
-          let partitions = []
+          let dbs = []
           for (let i = 0; i < count; i++) {
-            partitions.push(i.toString())
+            dbs.push(i.toString())
           }
-          server.partitions = partitions
+          server.dbs = dbs
         })
       },
       loadKeys () {
         this.servers.storage.data = []
         this.servers.storage.index = null
         let server = this.servers.list[this.servers.index]
-        server.db = this.servers.partitionIndex.toString()
+        server.db = this.servers.dbIndex.toString()
         this.destroyConnection()
         this.servers.connection = new Redis(server)
         // 查询所有key

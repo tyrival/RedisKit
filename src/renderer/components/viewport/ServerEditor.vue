@@ -28,7 +28,7 @@
     methods: {
       saveServer () {
         let editIndex = this.servers.editor.index
-        let model = Object.assign({partitions: []}, this.servers.editor.model)
+        let model = Object.assign({dbs: []}, this.servers.editor.model)
         if (editIndex === null || editIndex === undefined) {
           this.servers.list.push(model)
         } else {
