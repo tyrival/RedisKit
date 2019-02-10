@@ -27,7 +27,7 @@
 		</div>
 		<div class="el-row menu">
 			<el-button-group>
-				<el-button><i class="icon iconfont icon-plus"></i></el-button>
+				<el-button @click="addData"><i class="icon iconfont icon-plus"></i></el-button>
 				<el-button><i class="icon iconfont icon-refresh"></i></el-button>
 			</el-button-group>
 		</div>
@@ -86,6 +86,12 @@
           default:
             return ''
         }
+      },
+      addData () {
+        this.servers.storage.editor.model.name = null
+        this.servers.storage.editor.model.type = 'string'
+        this.servers.storage.editor.model.value = null
+        this.servers.storage.editor.show = true
       }
     }
   }
