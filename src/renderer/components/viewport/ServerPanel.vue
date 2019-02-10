@@ -14,7 +14,7 @@
 				     :class="servers.index === i ? 'is-active' : ''"
 				     @mouseover="mouseoverIndex = i"
 				     @mouseout="mouseoverIndex = null"
-				     @click="servers.index = i">
+				     @click="selectServer(i)">
 					<span>{{item.name}}</span>
 					<el-button type="text"
 					           size="mini"
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+  import Redis from 'ioredis'
   import '../../assets/styles/viewport/server-panel.scss'
 
   export default {
@@ -88,6 +89,68 @@
         this.servers.editor.model.password = model.password
         this.showEditor()
       },
+      selectServer (index) {
+        if (this.servers.connection) {
+          this.servers.connection.disconnect()
+          this.servers.connection = null
+        }
+        // 选中服务器
+        this.servers.index = index
+        let server = this.servers.list[index]
+        // 连接服务器
+        this.servers.connection = new Redis(server)
+        // 获取分区列表
+        this.servers.connection.config(['get', 'databases'], (_, reply) => {
+          if (!reply) {
+            return
+          }
+          let count = parseInt(reply[1])
+          if (!count) {
+            return
+          }
+          let partitions = []
+          for (let i = 0; i < count; i++) {
+            partitions.push(i.toString())
+          }
+          server.partitions = partitions
+        })
+      },
+      loadKeys () {
+        this.servers.storage.data = []
+        this.servers.storage.index = null
+        let server = this.servers.list[this.servers.index]
+        server.db = this.servers.partitionIndex.toString()
+        this.destroyConnection()
+        this.servers.connection = new Redis(server)
+        // 查询所有key
+        this.servers.connection.keys(['*'], (_, reply) => {
+          if (!reply || !reply.length) {
+            return
+          }
+          // 遍历key，构造查询key对应的数据类型的命令
+          let client = this.servers.connection.multi()
+          for (let i = 0; i < reply.length; i++) {
+            let key = reply[i]
+            client = client.type(key)
+          }
+          // 查询类型
+          client.exec((_, results) => {
+            for (let i = 0; i < results.length; i++) {
+              this.servers.storage.data.push({
+                name: reply[i],
+                type: results[i][1]
+              })
+            }
+          })
+        })
+      },
+      // destroyConnection () {
+      //   let client = this.servers.connection
+      //   if (client) {
+      //     client.disconnect()
+      //     client = null
+      //   }
+      // },
       showEditor () {
         this.servers.editor.show = true
       }

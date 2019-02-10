@@ -21,6 +21,7 @@
         servers: {
           index: null,
           partitionIndex: null,
+          connection: null,
           storage: {
             index: null,
             editor: {
@@ -28,9 +29,9 @@
               model: {name: null, type: null, value: null}
             },
             data: [
-              {name: 'user', type: 'string', value: '{"abc":1}'},
-              {name: 'role', type: 'list', value: '{"abc":2}'},
-              {name: 'org', type: 'set', value: '{"abc":4}'},
+              {name: 'user', type: 'string'},
+              {name: 'role', type: 'list'},
+              {name: 'org', type: 'set'},
               {name: 'test', type: 'hash', value: '{"abc":5}'},
               {name: 'auth', type: 'zset', value: '{"abc":3}'}
             ]
@@ -44,10 +45,9 @@
             {
               'name': 'localhost',
               'host': 'localhost',
-              'port': 6371,
+              'port': 6379,
               'password': '',
-              'partitions': [],
-              'connections': []
+              'partitions': []
             }
           ]
         }

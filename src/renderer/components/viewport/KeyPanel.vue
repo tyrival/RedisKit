@@ -8,7 +8,10 @@
 			</el-input>
 		</div>
 		<div class="tab-partition">
-			<el-tabs v-model="servers.partitionIndex" type="card" @tab-click="selectPartition">
+			<el-tabs v-if="showPartitionTab()"
+			         v-model="servers.partitionIndex"
+			         type="card"
+			         @tab-click="selectPartition">
 				<template v-for="(item, i) in getPartitions()">
 					<el-tab-pane :label="item" :name="item"></el-tab-pane>
 				</template>
@@ -36,6 +39,7 @@
 
 <script>
   import '../../assets/styles/viewport/key-panel.scss'
+  import Redis from 'ioredis'
 
   export default {
     name: 'KeyPanel',
@@ -56,7 +60,52 @@
         return false
       },
       selectPartition (tab, event) {
-        console.log(tab, event)
+        this.servers.partitionIndex = tab.index
+        this.loadKeys()
+      },
+      loadKeys () {
+        this.servers.storage.data = []
+        this.servers.storage.index = null
+        let server = this.servers.list[this.servers.index]
+        server.db = this.servers.partitionIndex.toString()
+        this.servers.connection = new Redis(server)
+        // 查询所有key
+        this.servers.connection.keys(['*'], (_, reply) => {
+          if (!reply || !reply.length) {
+            return
+          }
+          // 遍历key，构造查询key对应的数据类型的命令
+          let client = this.servers.connection.multi()
+          for (let i = 0; i < reply.length; i++) {
+            let key = reply[i]
+            client = client.type(key)
+          }
+          // 查询类型
+          client.exec((_, results) => {
+            let data = []
+            for (let i = 0; i < results.length; i++) {
+              data.push({
+                name: reply[i],
+                type: results[i][1]
+              })
+            }
+            this.servers.storage.data = data
+          })
+        })
+      },
+      destroyConnection () {
+        let client = this.servers.connection
+        if (client) {
+          client.disconnect()
+          client = null
+        }
+      },
+      showPartitionTab () {
+        let index = this.servers.index
+        if (index === null || index === undefined) {
+          return false
+        }
+        return true
       },
       getPartitions () {
         let index = this.servers.index
@@ -78,11 +127,11 @@
           case 'hash':
             return 'success'
           case 'list':
-            return 'info'
+            return 'danger'
           case 'set':
             return 'warning'
           case 'zset':
-            return 'danger'
+            return 'info'
           default:
             return ''
         }
@@ -92,6 +141,12 @@
         this.servers.storage.editor.model.type = 'string'
         this.servers.storage.editor.model.value = null
         this.servers.storage.editor.show = true
+      }
+    },
+    watch: {
+      'servers.partitionIndex': function (val) {
+        console.log('watch')
+        this.loadKeys()
       }
     }
   }
