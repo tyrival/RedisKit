@@ -1,0 +1,120 @@
+@import '../common/theme/index';
+@import './variables';
+
+$filter-height: 32px;
+$menu-height: 24px;
+.key-panel {
+  position: absolute;
+  top: 0;
+  left: $server-panel-width;
+  bottom: 0;
+  width: $key-panel-width;
+  border-right: 1px solid $global-border-color-base;
+  overflow: hidden;
+
+  .tab-partition {
+    position: absolute;
+    top: $filter-height;
+    left: 0;
+    bottom: 0;
+    width: $key-panel-width;
+    border-bottom: 1px solid $global-border-color-base;
+
+  }
+
+  .key-list {
+    position: absolute;
+    top: $filter-height + 28px + 1px;
+    left: 0;
+    bottom: $menu-height;
+    width: $key-panel-width;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    .key-item {
+      padding: 5px 15px;
+      font-size: 13px;
+      color: $global-font-color-secondary;
+      cursor: pointer;
+
+      .el-tag {
+        width: 42px;
+        text-align: center;
+        margin-right: 8px;
+      }
+
+      &.is-active {
+        background-color: $global-main-color;
+        color: $global-font-color;
+
+        .el-tag {
+          background-color: #364147;
+        }
+
+        .el-tag--success {
+          background-color: #3b4136;
+        }
+
+        .el-tag--warning {
+          background-color: #453F36;
+        }
+
+        .el-tag--info {
+          background-color: #3d3d3d;
+
+        }
+
+        .el-tag--danger {
+          background-color: #453a39;
+
+        }
+      }
+    }
+  }
+
+  .filter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: $filter-height;
+    width: $key-panel-width;
+    border-bottom: 1px solid $global-border-color-base;
+    z-index: 5;
+    display: flex;
+
+    .el-input__inner {
+      height: $filter-height + 1;
+      border-radius: 0px;
+      background-color: $global-bg-color-secondary;
+
+    }
+
+    .el-input__icon {
+      line-height: $filter-height;
+
+    }
+  }
+
+  .menu {
+    position: absolute;
+    height: $menu-height;
+    left: 0;
+    bottom: 0;
+    width: $key-panel-width;
+    border-top: 1px solid $global-border-color-base;
+
+    .el-button-group {
+      margin-top: -1px;
+
+      .el-button {
+        padding: 4px 6px;
+        border-radius: 0 !important;
+
+        .iconfont {
+          font-size: 12px;
+
+        }
+      }
+    }
+  }
+}

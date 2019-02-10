@@ -4,13 +4,13 @@ $global-main-color: #00BAFF !default;
 
 /* ========== 全局背景 ========== */
 // 背景色
-$global-bg-color: #1f1f1f !default;
+$global-bg-color: #333333 !default;
 // 次要背景色
-$global-bg-color-secondary: #27343E !default;
+$global-bg-color-secondary: #444444 !default;
 // 鼠标悬浮背景色
 $global-bg-color-hover: rgba(62, 158, 255, 0.3) !default;
 // 弹出气泡背景色
-$global-bg-color-popover: rgba(21, 26, 35, 0.9) !default;
+$global-bg-color-popover: rgba(62, 158, 255, 0.2) !default;
 // 激活背景色
 $global-bg-color-active: rgba(0, 231, 255, .11) !default;
 
@@ -39,6 +39,6 @@ $global-border-color-active: #05ddff !default;
 
 /* ========== 全局滚动条 ========== */
 // 宽度
-$scrollbar-width: 8px !default;
+$scrollbar-width: 6px !default;
 // 颜色
 $scrollbar-color: $global-bg-color-secondary !default;

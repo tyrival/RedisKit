@@ -1,7 +1,8 @@
 @import '../common/theme/index';
 @import './variables';
 
-$menu-height: 20px;
+$filter-height: 32px;
+$menu-height: 24px;
 .server-panel {
   position: absolute;
   top: 0;
@@ -10,6 +11,27 @@ $menu-height: 20px;
   width: $server-panel-width;
   border-right: 1px solid $global-border-color-base;
   overflow: hidden;
+
+  .filter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: $filter-height;
+    width: $server-panel-width;
+    border-bottom: 1px solid $global-border-color-base;
+    display: flex;
+
+    .el-input__inner {
+      height: $filter-height + 1;
+      border-radius: 0px;
+      background-color: $global-bg-color-secondary;
+
+    }
+    .el-input__icon {
+      line-height: $filter-height;
+
+    }
+  }
 
   .menu {
     position: absolute;
@@ -20,10 +42,10 @@ $menu-height: 20px;
     border-top: 1px solid $global-border-color-base;
 
     .el-button-group {
-      margin-top: -3px;
+      margin-top: -1px;
 
       .el-button {
-        padding: 2px 5px;
+        padding: 4px 6px;
         border-radius: 0 !important;
 
         .iconfont {
@@ -36,7 +58,7 @@ $menu-height: 20px;
 
   .server-list {
     position: absolute;
-    top: 0;
+    top: $filter-height;
     left: 0;
     bottom: $menu-height;
     width: $server-panel-width;
@@ -47,18 +69,9 @@ $menu-height: 20px;
       padding: 5px 20px;
       height: 25px;
       line-height: 25px;
-      color: $global-font-color;
+      color: $global-font-color-secondary;
       font-size: 14px;
       cursor: pointer;
-
-      &.is-active {
-        background-color: $global-main-color;
-
-        &:hover {
-          background-color: $global-main-color;
-        }
-
-      }
 
       &:hover {
         background-color: $global-bg-color-hover;
@@ -66,8 +79,21 @@ $menu-height: 20px;
 
       .el-button {
         font-size: 10px;
-        color: $global-font-color-primary;
+        color: $global-font-color-secondary;
         float: right;
+      }
+
+      &.is-active {
+        background-color: $global-bg-color-hover;
+        color: $global-font-color;
+
+        &:hover {
+          background-color: $global-bg-color-hover;
+        }
+
+        .el-button {
+          color: $global-font-color;
+        }
       }
     }
   }

@@ -1,6 +1,6 @@
 <template>
-	<el-dialog title="服务器信息" :visible.sync="servers.editor.show" width="35%">
-		<el-form :model="servers.editor.model" label-width="60px" size="mini">
+	<el-dialog title="服务器信息" :visible.sync="servers.editor.show" width="40%">
+		<el-form :model="servers.editor.model" label-width="80px" size="small">
 			<el-form-item label="名称">
 				<el-input v-model="servers.editor.model.name" autocomplete="off"></el-input>
 			</el-form-item>

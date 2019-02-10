@@ -1,8 +1,16 @@
 <template>
 	<div class="server-panel">
+		<div class="filter">
+			<el-input placeholder="请输入筛选条件"
+			          suffix-icon="el-icon-search"
+			          v-model="filterWord"
+			          clearable>
+			</el-input>
+		</div>
 		<div class="server-list">
-			<template v-for="(item, i) in servers.list">
+			<template v-for="(item, i) in this.servers.list">
 				<div class="item"
+				     v-show="filterServer(item)"
 				     :class="servers.index === i ? 'is-active' : ''"
 				     @mouseover="mouseoverIndex = i"
 				     @mouseout="mouseoverIndex = null"
@@ -33,10 +41,20 @@
     props: ['servers'],
     data () {
       return {
+        filterWord: '',
         mouseoverIndex: null
       }
     },
     methods: {
+      filterServer (item) {
+        if (this.filterWord === null || this.filterWord === undefined) {
+          return true
+        }
+        if (item.name.indexOf(this.filterWord) >= 0) {
+          return true
+        }
+        return false
+      },
       removeServer () {
         let index = this.servers.index
         if (index === null || index === undefined) {

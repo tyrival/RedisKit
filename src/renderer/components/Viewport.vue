@@ -1,6 +1,7 @@
 <template>
 	<div class="viewport">
 		<ServerPanel :servers="servers"></ServerPanel>
+		<KeyPanel :servers="servers"></KeyPanel>
 		<ServerEditor :servers="servers"></ServerEditor>
 	</div>
 </template>
@@ -8,6 +9,7 @@
 <script>
   import '../assets/styles/viewport/main.scss'
   import ServerPanel from './viewport/ServerPanel'
+  import KeyPanel from './viewport/KeyPanel'
   import ServerEditor from './viewport/ServerEditor'
 
   export default {
@@ -16,7 +18,17 @@
       return {
         servers: {
           index: null,
-          connections: [null, null, null],
+          partitionIndex: null,
+          storage: {
+            index: null,
+            data: [
+              {name: 'user', type: 'string', value: '{"abc":1}'},
+              {name: 'role', type: 'list', value: '{"abc":2}'},
+              {name: 'org', type: 'set', value: '{"abc":4}'},
+              {name: 'test', type: 'hash', value: '{"abc":5}'},
+              {name: 'auth', type: 'zset', value: '{"abc":3}'}
+            ]
+          },
           editor: {
             show: false,
             index: null,
@@ -27,6 +39,7 @@
               password: null
             }
           },
+          connections: [null, null, null],
           list: [
             {
               'name': 'localhost',
@@ -55,6 +68,7 @@
     },
     components: {
       'ServerPanel': ServerPanel,
+      'KeyPanel': KeyPanel,
       'ServerEditor': ServerEditor
     }
   }
