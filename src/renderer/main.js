@@ -5,6 +5,7 @@ import router from './router'
 import store from './store'
 import ElementUI from 'element-ui'
 import './assets/styles/common/element-override/index.scss'
+import './fonts/iconfont.css'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios

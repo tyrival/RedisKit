@@ -1,0 +1,16 @@
+@import '../../theme/index';
+
+.el-tree {
+
+  .el-tree-node {
+    .el-tree-node__content {
+      color: $global-font-color;
+    }
+
+    &.is-current {
+      .el-tree-node__content {
+        background-color: $global-bg-color-active;
+      }
+    }
+  }
+}

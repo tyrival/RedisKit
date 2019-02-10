@@ -1,0 +1,74 @@
+@import '../common/theme/index';
+@import './variables';
+
+$menu-height: 20px;
+.server-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: $server-panel-width;
+  border-right: 1px solid $global-border-color-base;
+  overflow: hidden;
+
+  .menu {
+    position: absolute;
+    height: $menu-height;
+    left: 0;
+    bottom: 0;
+    width: $server-panel-width;
+    border-top: 1px solid $global-border-color-base;
+
+    .el-button-group {
+      margin-top: -3px;
+
+      .el-button {
+        padding: 2px 5px;
+        border-radius: 0 !important;
+
+        .iconfont {
+          font-size: 12px;
+
+        }
+      }
+    }
+  }
+
+  .server-list {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: $menu-height;
+    width: $server-panel-width;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    .item {
+      padding: 5px 20px;
+      height: 25px;
+      line-height: 25px;
+      color: $global-font-color;
+      font-size: 14px;
+      cursor: pointer;
+
+      &.is-active {
+        background-color: $global-main-color;
+
+        &:hover {
+          background-color: $global-main-color;
+        }
+
+      }
+
+      &:hover {
+        background-color: $global-bg-color-hover;
+      }
+
+      .el-button {
+        font-size: 10px;
+        color: $global-font-color-primary;
+        float: right;
+      }
+    }
+  }
+}

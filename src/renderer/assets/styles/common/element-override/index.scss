@@ -9,4 +9,9 @@
 @import 'components/scrollbar';
 @import 'components/tab';
 @import 'components/tooltip';
+@import 'components/tree';
 @import 'components/upload';
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', SimSun, sans-serif;
+}
