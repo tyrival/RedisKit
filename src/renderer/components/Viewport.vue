@@ -28,13 +28,7 @@
               show: false,
               model: {name: null, type: null, value: null}
             },
-            data: [
-              {name: 'user', type: 'string'},
-              {name: 'role', type: 'list'},
-              {name: 'org', type: 'set'},
-              {name: 'test', type: 'hash', value: '{"abc":5}'},
-              {name: 'auth', type: 'zset', value: '{"abc":3}'}
-            ]
+            data: null
           },
           editor: {
             show: false,
