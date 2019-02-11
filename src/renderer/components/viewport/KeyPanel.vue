@@ -31,7 +31,7 @@
 		<div class="el-row menu">
 			<el-button-group>
 				<el-button @click="addData"><i class="icon iconfont icon-plus"></i></el-button>
-				<el-button><i class="icon iconfont icon-refresh"></i></el-button>
+				<el-button @click="loadKeys"><i class="icon iconfont icon-refresh"></i></el-button>
 			</el-button-group>
 		</div>
 	</div>

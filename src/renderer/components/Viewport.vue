@@ -4,6 +4,7 @@
 		<KeyPanel :servers="servers"></KeyPanel>
 		<ServerEditor :servers="servers"></ServerEditor>
 		<DataEditor :servers="servers"></DataEditor>
+		<ValuePanel :servers="servers"></ValuePanel>
 	</div>
 </template>
 
@@ -11,6 +12,7 @@
   import '../assets/styles/viewport/main.scss'
   import ServerPanel from './viewport/ServerPanel'
   import KeyPanel from './viewport/KeyPanel'
+  import ValuePanel from './viewport/ValuePanel'
   import ServerEditor from './viewport/ServerEditor'
   import DataEditor from './viewport/DataEditor'
 
@@ -68,6 +70,7 @@
     components: {
       'ServerPanel': ServerPanel,
       'KeyPanel': KeyPanel,
+      'ValuePanel': ValuePanel,
       'ServerEditor': ServerEditor,
       'DataEditor': DataEditor
     }

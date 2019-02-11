@@ -1,0 +1,56 @@
+@import '../common/theme/index';
+@import './variables';
+
+$menu-height: 32px;
+.value-panel {
+  position: absolute;
+  top: 0;
+  left: $server-panel-width + $key-panel-width;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+
+  .menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: $menu-height;
+    border-bottom: 1px solid $global-border-color-base;
+    z-index: 5;
+
+    .el-button {
+      padding: 0 15px;
+      height: $menu-height;
+      line-height: $menu-height;
+      border-radius: 0;
+    }
+
+    .el-select {
+      float: right;
+
+      .el-input {
+        .el-input__inner {
+          height: $menu-height + 1;
+          width: 80px;
+          line-height: $menu-height + 1;
+          border-radius: 0;
+
+        }
+
+        .el-select__caret {
+          line-height: $menu-height;
+
+        }
+      }
+    }
+  }
+
+  .content {
+    position: absolute;
+    top: $menu-height;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
