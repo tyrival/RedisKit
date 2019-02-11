@@ -47,6 +47,11 @@
       }
     },
     methods: {
+      /**
+       * 过滤服务器信息
+       * @param item
+       * @returns {boolean}
+       */
       filterServer (item) {
         if (this.filterWord === null || this.filterWord === undefined) {
           return true
@@ -56,6 +61,9 @@
         }
         return false
       },
+      /**
+       * 移除服务器信息
+       */
       removeServer () {
         let index = this.servers.index
         if (index === null || index === undefined) {
@@ -71,6 +79,9 @@
         }).catch(() => {
         })
       },
+      /**
+       * 新增服务器信息
+       */
       addServer () {
         this.servers.editor.index = null
         this.servers.editor.model.name = null
@@ -79,6 +90,11 @@
         this.servers.editor.model.password = null
         this.showEditor()
       },
+      /**
+       * 编辑服务器信息
+       * @param index
+       * @param e
+       */
       editServer (index, e) {
         e.stopPropagation()
         this.servers.editor.index = index
@@ -89,6 +105,10 @@
         this.servers.editor.model.password = model.password
         this.showEditor()
       },
+      /**
+       * 选中并连接服务器
+       * @param index
+       */
       selectServer (index) {
         if (this.servers.connection) {
           this.servers.connection.disconnect()
@@ -115,42 +135,9 @@
           server.dbs = dbs
         })
       },
-      loadKeys () {
-        this.servers.storage.data = []
-        this.servers.storage.index = null
-        let server = this.servers.list[this.servers.index]
-        server.db = this.servers.dbIndex.toString()
-        this.destroyConnection()
-        this.servers.connection = new Redis(server)
-        // 查询所有key
-        this.servers.connection.keys(['*'], (_, reply) => {
-          if (!reply || !reply.length) {
-            return
-          }
-          // 遍历key，构造查询key对应的数据类型的命令
-          let client = this.servers.connection.multi()
-          for (let i = 0; i < reply.length; i++) {
-            let key = reply[i]
-            client = client.type(key)
-          }
-          // 查询类型
-          client.exec((_, results) => {
-            for (let i = 0; i < results.length; i++) {
-              this.servers.storage.data.push({
-                name: reply[i],
-                type: results[i][1]
-              })
-            }
-          })
-        })
-      },
-      // destroyConnection () {
-      //   let client = this.servers.connection
-      //   if (client) {
-      //     client.disconnect()
-      //     client = null
-      //   }
-      // },
+      /**
+       * 显示服务器信息编辑窗口
+       */
       showEditor () {
         this.servers.editor.show = true
       }

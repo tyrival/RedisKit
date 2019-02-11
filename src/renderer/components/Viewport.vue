@@ -23,20 +23,27 @@
           index: null,
           // 当前数据库索引
           dbIndex: null,
+          // 连接实例
           connection: null,
+          // 数据内容
           storage: {
+            // 当前key
             index: null,
+            // 新增数据编辑窗口
             editor: {
               show: false,
               model: {name: null, type: null, value: null}
             },
+            // 数据key、type对象列表 {name, type}
             data: null
           },
+          // 服务器信息编辑窗口
           editor: {
             show: false,
             index: null,
             model: {name: null, host: null, port: null, password: null}
           },
+          // 服务器信息列表
           list: [
             {
               'name': 'localhost',

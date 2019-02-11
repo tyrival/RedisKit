@@ -28,7 +28,7 @@
 		</el-form>
 		<div slot="footer" class="dialog-footer">
 			<el-button size="mini" @click="servers.storage.editor.show = false">取 消</el-button>
-			<el-button size="mini" type="primary" @click="saveServer">确 定</el-button>
+			<el-button size="mini" type="primary" @click="saveData">确 定</el-button>
 		</div>
 	</el-dialog>
 </template>
@@ -43,7 +43,11 @@
       }
     },
     methods: {
-      saveServer () {
+      /**
+       * 保存数据
+       */
+      saveData () {
+        // TODO 增加表单校验规则，并在保存前验证
       }
     }
   }

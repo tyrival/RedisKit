@@ -26,7 +26,11 @@
     name: 'ServerEditor',
     props: ['servers'],
     methods: {
+      /**
+       * 保存服务器信息
+       */
       saveServer () {
+        // TODO 增加表单校验规则，并在保存前验证
         let editIndex = this.servers.editor.index
         let model = Object.assign({dbs: []}, this.servers.editor.model)
         if (editIndex === null || editIndex === undefined) {

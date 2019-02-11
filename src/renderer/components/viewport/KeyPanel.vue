@@ -8,11 +8,11 @@
 			</el-input>
 		</div>
 		<div class="tab-db">
-			<el-tabs v-if="showPartitionTab()"
+			<el-tabs v-if="showDbTab()"
 			         v-model="servers.dbIndex"
 			         type="card"
-			         @tab-click="selectPartition">
-				<template v-for="(item, i) in getPartitions()">
+			         @tab-click="selectDb">
+				<template v-for="(item, i) in getDbs()">
 					<el-tab-pane :label="item" :name="item"></el-tab-pane>
 				</template>
 			</el-tabs>
@@ -50,6 +50,11 @@
       }
     },
     methods: {
+      /**
+       * 过滤key列表
+       * @param item
+       * @returns {boolean}
+       */
       filterKey (item) {
         if (this.filterWord === null || this.filterWord === undefined) {
           return true
@@ -59,10 +64,18 @@
         }
         return false
       },
-      selectPartition (tab, event) {
+      /**
+       * 选中数据库
+       * @param tab
+       * @param event
+       */
+      selectDb (tab, event) {
         this.servers.dbIndex = tab.index
         this.loadKeys()
       },
+      /**
+       * 加载key列表
+       */
       loadKeys () {
         this.servers.storage.data = []
         this.servers.storage.index = null
@@ -93,6 +106,9 @@
           })
         })
       },
+      /**
+       * 销毁连接客户端
+       */
       destroyConnection () {
         let client = this.servers.connection
         if (client) {
@@ -100,26 +116,43 @@
           client = null
         }
       },
-      showPartitionTab () {
+      /**
+       * 显示数据库tab列表
+       * @returns {boolean}
+       */
+      showDbTab () {
         let index = this.servers.index
         if (index === null || index === undefined) {
           return false
         }
         return true
       },
-      getPartitions () {
+      /**
+       * 获取数据库信息
+       * @returns {*}
+       */
+      getDbs () {
         let index = this.servers.index
         if (index === null || index === undefined) {
           return
         }
         return this.servers.list[this.servers.index].dbs
       },
+      /**
+       * 判断是否显示key列表
+       * @returns {boolean}
+       */
       showKeyList () {
         if (this.servers.index !== null && this.servers.dbIndex != null) {
           return true
         }
         return false
       },
+      /**
+       * 根据数据类型映射tag样式
+       * @param item
+       * @returns {string}
+       */
       calcTypeTagStyle (item) {
         switch (item.type) {
           case 'string':
@@ -136,6 +169,9 @@
             return ''
         }
       },
+      /**
+       * 增加数据
+       */
       addData () {
         this.servers.storage.editor.model.name = null
         this.servers.storage.editor.model.type = 'string'
