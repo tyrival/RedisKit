@@ -22,7 +22,7 @@
 				<div class="key-item"
 				     v-show="filterKey(item)"
 				     :class="servers.storage.index === i ? 'is-active' : ''"
-				     @click="servers.storage.index = i">
+				     @click="selectKey(i)">
 					<el-tag size="mini" :type="calcTypeTagStyle(item)">{{item.type}}</el-tag>
 					{{item.name}}
 				</div>
@@ -105,6 +105,56 @@
             this.servers.storage.data = data
           })
         })
+      },
+      /**
+       * 选中key
+       */
+      selectKey (index) {
+        this.servers.storage.index = index
+        let data = this.servers.storage.data[index]
+        let key = data.name
+        let type = data.type
+        this.loadValue(key, type, this.displayValue)
+      },
+      /**
+       * 将值加载到缓存中，并显示
+       */
+      displayValue (value) {
+        this.servers.storage.value = value
+      },
+      /**
+       * 加载值
+       */
+      loadValue (key, type, callback) {
+        switch (type) {
+          case 'string':
+            this.servers.connection.get(key).then((result) => {
+              callback(result)
+            })
+            break
+          case 'hash':
+            this.servers.connection.hgetall(key).then((result) => {
+              callback(result)
+            })
+            break
+          case 'list':
+            this.servers.connection.lrange(key, 0, -1).then((result) => {
+              callback(result)
+            })
+            break
+          case 'set':
+            this.servers.connection.smembers(key).then((result) => {
+              callback(result)
+            })
+            break
+          case 'zset':
+            this.servers.connection.zrange(key, 0, -1, 'withscores').then((result) => {
+              callback(result)
+            })
+            break
+          default:
+            break
+        }
       },
       /**
        * 销毁连接客户端

@@ -29,6 +29,8 @@
           storage: {
             // 当前key
             index: null,
+            // 当前value
+            value: null,
             // 新增数据编辑窗口
             editor: {
               show: false,
