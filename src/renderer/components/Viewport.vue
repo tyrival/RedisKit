@@ -51,6 +51,13 @@
               'port': 6379,
               'password': '',
               'dbs': []
+            },
+            {
+              'name': 'localhost1',
+              'host': 'localhost',
+              'port': 6379,
+              'password': '',
+              'dbs': []
             }
           ]
         }

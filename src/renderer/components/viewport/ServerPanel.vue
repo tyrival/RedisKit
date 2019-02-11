@@ -113,6 +113,7 @@
         if (this.servers.connection) {
           this.servers.connection.disconnect()
           this.servers.connection = null
+          this.servers.dbIndex = null
         }
         // 选中服务器
         this.servers.index = index

@@ -181,6 +181,9 @@
     },
     watch: {
       'servers.dbIndex': function (val) {
+        if (val === null || val === undefined) {
+          return
+        }
         this.loadKeys()
       }
     }
