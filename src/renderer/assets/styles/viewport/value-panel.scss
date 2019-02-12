@@ -1,7 +1,8 @@
 @import '../common/theme/index';
 @import './variables';
 
-$menu-height: 32px;
+$header-height: 32px;
+$menu-height: 24px;
 .value-panel {
   position: absolute;
   top: 0;
@@ -10,37 +11,36 @@ $menu-height: 32px;
   bottom: 0;
   overflow: hidden;
 
-  .menu {
+  .header {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: $menu-height;
+    height: $header-height;
     border-bottom: 1px solid $global-border-color-base;
-    z-index: 5;
 
     .el-button {
       padding: 0 15px;
-      height: $menu-height;
-      line-height: $menu-height;
+      height: $header-height;
+      line-height: $header-height;
       border-radius: 0;
     }
 
     .el-select {
+      margin-top: -1px;
       float: right;
 
       .el-input {
         .el-input__inner {
-          height: $menu-height + 1;
+          height: $header-height + 1;
           width: 80px;
-          line-height: $menu-height + 1;
+          line-height: $header-height + 1;
           border-radius: 0;
 
         }
 
         .el-select__caret {
-          line-height: $menu-height;
-
+          line-height: $header-height;
         }
       }
     }
@@ -48,9 +48,99 @@ $menu-height: 32px;
 
   .content {
     position: absolute;
-    top: $menu-height;
+    top: $header-height;
     left: 0;
     right: 0;
     bottom: 0;
+
+    textarea {
+      font-family: Menlo, Consolas, "Courier New", Courier, 'Source Sans Pro', Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    .data-key {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: $data-key-width;
+      border-right: 1px solid $global-border-color-base;
+      overflow: auto;
+
+      .item {
+        height: 30px;
+        line-height: 30px;
+        padding: 0 15px;
+        font-size: 13px;
+        color: $global-font-color-secondary;
+        border-bottom: 1px solid $global-border-color-secondary;
+        cursor: pointer;
+
+        &.item-list {
+          padding: 0;
+          .col-index {
+            border-right: 1px solid $global-border-color-secondary;
+            text-align: center;
+          }
+          .col-ele {
+            padding: 0 15px;
+          }
+        }
+
+        &.is-active {
+          background-color: $global-bg-color-hover;
+          color: $global-font-color;
+        }
+      }
+    }
+
+    .data-value {
+      position: absolute;
+      top: 0;
+      left: $data-key-width;
+      right: 0;
+      bottom: 0;
+    }
+
+    .el-textarea {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+
+      .el-textarea__inner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 0;
+        resize: none;
+      }
+    }
+  }
+
+  .menu {
+    position: absolute;
+    height: $menu-height;
+    left: 0;
+    bottom: 0;
+    width: $key-panel-width;
+    border-top: 1px solid $global-border-color-base;
+
+    .el-button-group {
+      margin-top: -1px;
+
+      .el-button {
+        padding: 4px 6px;
+        border-radius: 0 !important;
+
+        .iconfont {
+          font-size: 12px;
+
+        }
+      }
+    }
   }
 }
