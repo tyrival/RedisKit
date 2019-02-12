@@ -114,12 +114,23 @@
           this.servers.connection.disconnect()
           this.servers.connection = null
           this.servers.dbIndex = null
+          this.servers.storage.index = null
         }
         // 选中服务器
         this.servers.index = index
         let server = this.servers.list[index]
+        // 最多重试2次，第3次报错
+        server.retryStrategy = (times) => {
+          if (times <= 2) {
+            return 500
+          }
+          this.$message.error('连接服务器失败。')
+        }
         // 连接服务器
         this.servers.connection = new Redis(server)
+        // 错误信息处理
+        this.servers.connection.on('error', (_) => {
+        })
         // 获取分区列表
         this.servers.connection.config(['get', 'databases'], (_, reply) => {
           if (!reply) {
