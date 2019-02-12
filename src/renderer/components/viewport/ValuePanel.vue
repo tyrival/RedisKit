@@ -12,7 +12,7 @@
 		</div>
 		<div class="content">
 			<div class="content-string" v-if="getDataType() === 'string'">
-				<el-input type="textarea" v-model="servers.storage.value"></el-input>
+				<el-input type="textarea" v-model="dataValue"></el-input>
 			</div>
 			<div class="content-hash" v-else-if="getDataType() === 'hash'">
 				<div class="data-key">
@@ -93,6 +93,14 @@
 					<div class="el-row menu">
 						<el-button-group>
 							<el-button><i class="icon iconfont icon-plus"></i></el-button>
+							<el-button v-show="order === 1"
+							           @click="switchOrder">
+								<i class="icon iconfont icon-asc"></i>
+							</el-button>
+							<el-button v-show="order === 0"
+							           @click="switchOrder">
+								<i class="icon iconfont icon-desc"></i>
+							</el-button>
 						</el-button-group>
 					</div>
 				</div>
@@ -181,7 +189,22 @@
     watch: {
       'servers.storage.value': function (val) {
         this.dataKey = null
-        this.dataValue = null
+        this.dataFormat.current = 'RAW'
+        if (this.getDataType() === 'string') {
+          this.dataValue = val
+        } else {
+          this.dataValue = null
+        }
+      },
+      'dataFormat.current': function (val) {
+        switch (val) {
+          case 'JSON':
+            this.dataValue = JSON.stringify(JSON.parse(this.dataValue), null, 2)
+            break
+          default:
+            this.dataValue = JSON.stringify(JSON.parse(this.dataValue))
+            break
+        }
       }
     }
   }
