@@ -45,7 +45,8 @@
 					</template>
 					<div class="el-row menu">
 						<el-button-group>
-							<el-button><i class="icon iconfont icon-plus"></i></el-button>
+							<el-button><i class="icon iconfont icon-unshift"></i></el-button>
+							<el-button><i class="icon iconfont icon-push"></i></el-button>
 							<el-button v-show="order === 1"
 							           @click="switchOrder">
 								<i class="icon iconfont icon-asc"></i>
@@ -82,12 +83,12 @@
 			</div>
 			<div class="content-zset" v-else-if="getDataType() === 'zset'">
 				<div class="data-key">
-					<template v-for="i in servers.storage.value.length / 2 - 1">
+					<template v-for="i in servers.storage.value.length / 2">
 						<div class="el-row item item-list"
-						     :class="dataKey === i ? 'is-active' : ''"
-						     @click="selectZsetItem(i)">
-							<el-col class="col-index" :span="6">{{servers.storage.value[i * 2 + 1]}}</el-col>
-							<el-col class="col-ele" :span="18">{{servers.storage.value[i * 2]}}</el-col>
+						     :class="dataKey === i - 1 ? 'is-active' : ''"
+						     @click="selectZsetItem(i - 1)">
+							<el-col class="col-index" :span="6">{{servers.storage.value[i * 2 - 1]}}</el-col>
+							<el-col class="col-ele" :span="18">{{servers.storage.value[(i - 1) * 2]}}</el-col>
 						</div>
 					</template>
 					<div class="el-row menu">
@@ -161,7 +162,7 @@
        */
       selectHashKey (key) {
         this.dataKey = key
-        this.dataValue = this.servers.storage.value[key]
+        this.dataValue = this.formatValue(this.servers.storage.value[key])
       },
       /**
        * 选中list、set元素
@@ -169,7 +170,7 @@
        */
       selectListItem (index) {
         this.dataKey = index
-        this.dataValue = this.servers.storage.value[index]
+        this.dataValue = this.formatValue(this.servers.storage.value[index])
       },
       /**
        * 选中zset元素
@@ -177,34 +178,48 @@
        */
       selectZsetItem (index) {
         this.dataKey = index
-        this.dataValue = this.servers.storage.value[index * 2]
+        this.dataValue = this.formatValue(this.servers.storage.value[index * 2])
       },
       /**
        * 切换排序方式
        */
       switchOrder () {
         this.order = Math.abs(this.order - 1)
+      },
+      /**
+       * 格式化数据
+       * @param value
+       * @param format
+       * @returns {string}
+       */
+      formatValue (value) {
+        try {
+          switch (this.dataFormat.current) {
+            case 'JSON':
+              return JSON.stringify(JSON.parse(value), null, 2)
+            default:
+              return JSON.stringify(JSON.parse(value))
+          }
+        } catch (e) {
+          this.dataFormat.current = 'RAW'
+          return value
+        }
       }
     },
     watch: {
       'servers.storage.value': function (val) {
         this.dataKey = null
-        this.dataFormat.current = 'RAW'
         if (this.getDataType() === 'string') {
-          this.dataValue = val
+          this.dataValue = this.formatValue(val)
         } else {
           this.dataValue = null
         }
       },
-      'dataFormat.current': function (val) {
-        switch (val) {
-          case 'JSON':
-            this.dataValue = JSON.stringify(JSON.parse(this.dataValue), null, 2)
-            break
-          default:
-            this.dataValue = JSON.stringify(JSON.parse(this.dataValue))
-            break
+      'dataFormat.current': function () {
+        if (!this.dataValue) {
+          return
         }
+        this.dataValue = this.formatValue(this.dataValue)
       }
     }
   }

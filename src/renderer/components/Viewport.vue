@@ -2,9 +2,10 @@
 	<div class="viewport">
 		<ServerPanel :servers="servers"></ServerPanel>
 		<KeyPanel :servers="servers"></KeyPanel>
+		<ValuePanel :servers="servers"></ValuePanel>
 		<ServerEditor :servers="servers"></ServerEditor>
 		<DataEditor :servers="servers"></DataEditor>
-		<ValuePanel :servers="servers"></ValuePanel>
+		<KeyContextMenu :servers="servers"></KeyContextMenu>
 	</div>
 </template>
 
@@ -15,6 +16,7 @@
   import ValuePanel from './viewport/ValuePanel'
   import ServerEditor from './viewport/ServerEditor'
   import DataEditor from './viewport/DataEditor'
+  import KeyContextMenu from './viewport/KeyContextMenu'
 
   export default {
     name: 'Viewport',
@@ -37,6 +39,11 @@
             editor: {
               show: false,
               model: {name: null, type: null, value: null}
+            },
+            // key右键菜单
+            contextMenu: {
+              index: null,
+              style: {top: 0, left: 0}
             },
             // 数据key、type对象列表 {name, type}
             data: null
@@ -72,7 +79,8 @@
       'KeyPanel': KeyPanel,
       'ValuePanel': ValuePanel,
       'ServerEditor': ServerEditor,
-      'DataEditor': DataEditor
+      'DataEditor': DataEditor,
+      'KeyContextMenu': KeyContextMenu
     }
   }
 </script>

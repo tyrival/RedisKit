@@ -43,6 +43,10 @@ $menu-height: 24px;
         margin-right: 8px;
       }
 
+      &:hover {
+        background-color: $global-bg-color-hover;
+      }
+
       &.is-active {
         background-color: $global-main-color;
         color: $global-font-color;

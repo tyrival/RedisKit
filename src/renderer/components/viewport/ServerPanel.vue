@@ -14,7 +14,7 @@
 				     :class="servers.index === i ? 'is-active' : ''"
 				     @mouseover="mouseoverIndex = i"
 				     @mouseout="mouseoverIndex = null"
-				     @click="selectServer(i)">
+				     @click="selectServer(i, $event)">
 					<span>{{item.name}}</span>
 					<el-button type="text"
 					           size="mini"
@@ -109,7 +109,10 @@
        * 选中并连接服务器
        * @param index
        */
-      selectServer (index) {
+      selectServer (index, e) {
+        if (this.servers.index === index) {
+          return
+        }
         if (this.servers.connection) {
           this.servers.connection.disconnect()
           this.servers.connection = null

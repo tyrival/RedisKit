@@ -22,7 +22,7 @@
 				<div class="key-item"
 				     v-show="filterKey(item)"
 				     :class="servers.storage.index === i ? 'is-active' : ''"
-				     @click="selectKey(i)">
+				     @mousedown="selectKey(i, $event)">
 					<el-tag size="mini" :type="calcTypeTagStyle(item)">{{item.type}}</el-tag>
 					{{item.name}}
 				</div>
@@ -109,12 +109,18 @@
       /**
        * 选中key
        */
-      selectKey (index) {
+      selectKey (index, e) {
         this.servers.storage.index = index
         let data = this.servers.storage.data[index]
         let key = data.name
         let type = data.type
         this.loadValue(key, type, this.displayValue)
+        // 右键点击时，还需弹出右键菜单
+        if (e.button === 2) {
+          this.servers.storage.contextMenu.index = index
+          this.servers.storage.contextMenu.style.top = e.pageY
+          this.servers.storage.contextMenu.style.left = e.pageX
+        }
       },
       /**
        * 将值加载到缓存中，并显示
@@ -235,6 +241,11 @@
           return
         }
         this.loadKeys()
+      },
+      'servers.storage.editor.show': function (val) {
+        if (!val) {
+          this.loadKeys()
+        }
       }
     }
   }
