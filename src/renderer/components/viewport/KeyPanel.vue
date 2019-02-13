@@ -116,7 +116,7 @@
         let type = data.type
         this.loadValue(key, type, this.displayValue)
         // 右键点击时，还需弹出右键菜单
-        if (e.button === 2) {
+        if (e && e.button === 2) {
           this.servers.storage.contextMenu.index = index
           this.servers.storage.contextMenu.style.top = e.pageY
           this.servers.storage.contextMenu.style.left = e.pageX

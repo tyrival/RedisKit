@@ -36,7 +36,12 @@ $menu-height: 24px;
           width: 80px;
           line-height: $header-height + 1;
           border-radius: 0;
-
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -khtml-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
         }
 
         .el-select__caret {
@@ -67,23 +72,82 @@ $menu-height: 24px;
       border-right: 1px solid $global-border-color-base;
       overflow: auto;
 
+      $item-height: 30px;
+
       .item {
-        height: 30px;
-        line-height: 30px;
+        height: $item-height;
+        line-height: $item-height;
         padding: 0 15px;
         font-size: 13px;
         color: $global-font-color-secondary;
         border-bottom: 1px solid $global-border-color-secondary;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
         cursor: pointer;
+        display: flex;
+
+        $save-button-width: 40px;
+
+        .el-input {
+          .el-input__inner {
+            background-color: $global-bg-color-secondary;
+            border-color: $global-main-color;
+            margin-left: -15px;
+            width: $key-panel-width - $save-button-width;
+            height: $item-height;
+            color: $global-font-color;
+            font-size: 12px;
+            border-radius: 0;
+          }
+        }
+
+        .el-button {
+          width: $save-button-width;
+          height: $item-height;
+          line-height: $item-height;
+          padding: 0 7px;
+          border-radius: 0;
+          font-size: 12px;
+        }
 
         &.item-list {
           padding: 0;
+
           .col-index {
             border-right: 1px solid $global-border-color-secondary;
             text-align: center;
           }
+
           .col-ele {
+            border-right: 1px solid $global-border-color-secondary;
             padding: 0 15px;
+            display: flex;
+
+            .el-input {
+              .el-input__inner {
+                background-color: $global-bg-color-secondary;
+                border-color: $global-main-color;
+                margin-left: -15px;
+                width: 100px - $save-button-width;
+                height: $item-height;
+                color: $global-font-color;
+                font-size: 12px;
+                border-radius: 0;
+              }
+            }
+
+            .el-button {
+              width: $save-button-width;
+              height: $item-height;
+              line-height: $item-height;
+              padding: 0 7px;
+              border-radius: 0;
+              font-size: 12px;
+            }
           }
         }
 

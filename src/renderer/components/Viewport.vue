@@ -1,7 +1,7 @@
 <template>
 	<div class="viewport">
 		<ServerPanel :servers="servers"></ServerPanel>
-		<KeyPanel :servers="servers"></KeyPanel>
+		<KeyPanel :servers="servers" ref="keyPanel"></KeyPanel>
 		<ValuePanel :servers="servers"></ValuePanel>
 		<ServerEditor :servers="servers"></ServerEditor>
 		<DataEditor :servers="servers"></DataEditor>
