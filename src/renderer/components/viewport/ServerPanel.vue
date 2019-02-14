@@ -9,18 +9,20 @@
 		</div>
 		<div class="server-list">
 			<template v-for="(item, i) in this.config.servers">
-				<div class="item"
+				<div class="el-row item"
 				     v-show="filterServer(item)"
 				     :class="config.index === i ? 'is-active' : ''"
 				     @mouseover="mouseoverIndex = i"
 				     @mouseout="mouseoverIndex = null"
 				     @click="selectServer(i, $event)">
-					<span>{{item.name}}</span>
-					<el-button type="text"
-					           size="mini"
-					           v-show="mouseoverIndex === i"
-					           @click="editServer(i, $event)">编辑
-					</el-button>
+					<el-col :span="18">{{item.name}}</el-col>
+					<el-col :span="6">
+						<el-button type="text"
+						           size="mini"
+						           v-show="mouseoverIndex === i"
+						           @click="editServer(i, $event)">编辑
+						</el-button>
+					</el-col>
 				</div>
 			</template>
 		</div>

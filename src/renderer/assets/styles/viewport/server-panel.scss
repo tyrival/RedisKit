@@ -2,6 +2,7 @@
 @import './variables';
 
 $filter-height: 32px;
+$item-height: 32px;
 $menu-height: 24px;
 .server-panel {
   position: absolute;
@@ -27,6 +28,7 @@ $menu-height: 24px;
       background-color: $global-bg-color-secondary;
 
     }
+
     .el-input__icon {
       line-height: $filter-height;
 
@@ -50,7 +52,6 @@ $menu-height: 24px;
 
         .iconfont {
           font-size: 12px;
-
         }
       }
     }
@@ -66,9 +67,8 @@ $menu-height: 24px;
     overflow-y: auto;
 
     .item {
-      padding: 5px 20px;
-      height: 25px;
-      line-height: 25px;
+      height: $item-height;
+      line-height: $item-height;
       color: $global-font-color-secondary;
       font-size: 14px;
       -webkit-touch-callout: none;
@@ -83,10 +83,16 @@ $menu-height: 24px;
         background-color: $global-bg-color-hover;
       }
 
+      .el-col {
+        padding: 0 0 0 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
       .el-button {
         font-size: 10px;
         color: $global-font-color-secondary;
-        float: right;
       }
 
       &.is-active {

@@ -81,6 +81,9 @@ $menu-height: 24px;
         font-size: 13px;
         color: $global-font-color-secondary;
         border-bottom: 1px solid $global-border-color-secondary;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         -webkit-touch-callout: none;
         -webkit-user-select: none;
         -khtml-user-select: none;
@@ -91,6 +94,13 @@ $menu-height: 24px;
         display: flex;
 
         $save-button-width: 40px;
+
+        .el-col {
+          padding: 0 15px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
 
         .el-input {
           .el-input__inner {
@@ -124,7 +134,6 @@ $menu-height: 24px;
 
           .col-ele {
             border-right: 1px solid $global-border-color-secondary;
-            padding: 0 15px;
             display: flex;
 
             .el-input {

@@ -51,7 +51,7 @@
               'password': ''
             },
             {
-              'name': 'localhost1',
+              'name': 'localhost1localhost1localhost1localhost1localhost1localhost1localhost1',
               'host': 'localhost',
               'port': 6379,
               'password': ''

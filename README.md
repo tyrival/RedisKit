@@ -1,4 +1,13 @@
+# RedisKit
+
+## 概述
+
+RedisKit是一款基于 [ioredis](https://github.com/luin/ioredis) 开发的Redis GUI客户端，此应用基于electron开发，可兼容windows、macos、linux系统，GUI使用Vue+ElementUI进行开发。
+
+
+
 ``` json
+
 config: {
   name: String || '默认服务器',
   host: String || 'localhost',
@@ -13,6 +22,7 @@ config: {
   },
   onError: Function
 }
+format: 'RAW'/'JSON' | 'RAW'
 databases: Array
 store: Array || []
 model: {
