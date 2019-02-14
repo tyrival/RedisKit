@@ -58,13 +58,14 @@
             return
           }
           let editIndex = this.config.serverEditor.index
-          let model = Object.assign({dbs: []}, this.config.serverEditor.model)
+          let model = Object.assign({}, this.config.serverEditor.model)
           if (editIndex === null || editIndex === undefined) {
             this.config.servers.push(model)
           } else {
             this.config.servers.splice(editIndex, 1, model)
           }
           this.config.serverEditor.show = false
+          this.$dbServers(this.config.servers)
         })
       }
     },

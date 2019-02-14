@@ -43,22 +43,14 @@
             style: {top: 0, left: 0}
           },
           // 服务器信息列表
-          servers: [
-            {
-              'name': 'localhost',
-              'host': 'localhost',
-              'port': 6379,
-              'password': ''
-            },
-            {
-              'name': 'localhost1localhost1localhost1localhost1localhost1localhost1localhost1',
-              'host': 'localhost',
-              'port': 6379,
-              'password': ''
-            }
-          ]
+          servers: null
         }
       }
+    },
+    mounted () {
+      this.$db.find({}, (_, docs) => {
+        this.config.servers = docs
+      })
     },
     components: {
       'ServerPanel': ServerPanel,

@@ -8,7 +8,6 @@ class RedisClient {
     }
     this.resetModel()
     this.config = Object.assign({
-      name: '默认服务器',
       host: 'localhost',
       port: 6379,
       password: '',
@@ -20,6 +19,8 @@ class RedisClient {
       },
       onError: null
     }, config)
+    this.config.host = this.config.host || 'localhost'
+    this.config.port = this.config.port || 6379
     this.databases = []
     this.store = []
     this.connection = new Redis(this)

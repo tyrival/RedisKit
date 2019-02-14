@@ -78,6 +78,7 @@
         }).then(() => {
           this.config.servers.splice(index, 1)
           this.config.index = null
+          this.$dbServers(this.config.servers)
         }).catch(() => {
         })
       },
