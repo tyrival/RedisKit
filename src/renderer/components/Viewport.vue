@@ -1,11 +1,11 @@
 <template>
 	<div class="viewport">
-		<ServerPanel :servers="servers"></ServerPanel>
-		<KeyPanel :servers="servers" ref="keyPanel"></KeyPanel>
-		<ValuePanel :servers="servers"></ValuePanel>
-		<ServerEditor :servers="servers"></ServerEditor>
-		<DataEditor :servers="servers"></DataEditor>
-		<KeyContextMenu :servers="servers"></KeyContextMenu>
+		<ServerPanel :config="config"></ServerPanel>
+		<KeyPanel :config="config" ref="keyPanel"></KeyPanel>
+		<ValuePanel :config="config"></ValuePanel>
+		<ServerEditor :config="config"></ServerEditor>
+		<DataEditor :config="config"></DataEditor>
+		<KeyContextMenu :config="config"></KeyContextMenu>
 	</div>
 </template>
 
@@ -22,53 +22,39 @@
     name: 'Viewport',
     data () {
       return {
-        servers: {
+        config: {
           // 当前服务器索引
           index: null,
-          // 当前数据库索引
-          dbIndex: null,
           // 连接实例
-          connection: null,
-          // 数据内容
-          storage: {
-            // 当前key
-            index: null,
-            // 当前value
-            value: null,
-            // 新增数据编辑窗口
-            editor: {
-              show: false,
-              model: {name: null, type: null, value: null}
-            },
-            // key右键菜单
-            contextMenu: {
-              index: null,
-              style: {top: 0, left: 0}
-            },
-            // 数据key、type对象列表 {name, type}
-            data: null
-          },
+          client: null,
           // 服务器信息编辑窗口
-          editor: {
+          serverEditor: {
             show: false,
             index: null,
             model: {name: null, host: null, port: null, password: null}
           },
+          dataEditor: {
+            show: false,
+            model: {name: null, type: null, value: null}
+          },
+          // key右键菜单
+          keyContextMenu: {
+            index: null,
+            style: {top: 0, left: 0}
+          },
           // 服务器信息列表
-          list: [
+          servers: [
             {
               'name': 'localhost',
               'host': 'localhost',
               'port': 6379,
-              'password': '',
-              'dbs': []
+              'password': ''
             },
             {
               'name': 'localhost1',
               'host': 'localhost',
               'port': 6379,
-              'password': '',
-              'dbs': []
+              'password': ''
             }
           ]
         }

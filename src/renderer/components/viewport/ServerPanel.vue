@@ -8,10 +8,10 @@
 			</el-input>
 		</div>
 		<div class="server-list">
-			<template v-for="(item, i) in this.servers.list">
+			<template v-for="(item, i) in this.config.servers">
 				<div class="item"
 				     v-show="filterServer(item)"
-				     :class="servers.index === i ? 'is-active' : ''"
+				     :class="config.index === i ? 'is-active' : ''"
 				     @mouseover="mouseoverIndex = i"
 				     @mouseout="mouseoverIndex = null"
 				     @click="selectServer(i, $event)">
@@ -34,12 +34,12 @@
 </template>
 
 <script>
-  import Redis from 'ioredis'
+  import RedisClient from '../../plugin/RedisClient'
   import '../../assets/styles/viewport/server-panel.scss'
 
   export default {
     name: 'ServerPanel',
-    props: ['servers'],
+    props: ['config'],
     data () {
       return {
         filterWord: '',
@@ -65,7 +65,7 @@
        * 移除服务器信息
        */
       removeServer () {
-        let index = this.servers.index
+        let index = this.config.index
         if (index === null || index === undefined) {
           return
         }
@@ -74,8 +74,8 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.servers.list.splice(index, 1)
-          this.servers.index = null
+          this.config.servers.splice(index, 1)
+          this.config.index = null
         }).catch(() => {
         })
       },
@@ -83,11 +83,11 @@
        * 新增服务器信息
        */
       addServer () {
-        this.servers.editor.index = null
-        this.servers.editor.model.name = null
-        this.servers.editor.model.host = null
-        this.servers.editor.model.port = null
-        this.servers.editor.model.password = null
+        this.config.serverEditor.index = null
+        this.config.serverEditor.model.name = null
+        this.config.serverEditor.model.host = null
+        this.config.serverEditor.model.port = null
+        this.config.serverEditor.model.password = null
         this.showEditor()
       },
       /**
@@ -97,12 +97,12 @@
        */
       editServer (index, e) {
         e.stopPropagation()
-        this.servers.editor.index = index
-        let model = this.servers.list[index]
-        this.servers.editor.model.name = model.name
-        this.servers.editor.model.host = model.host
-        this.servers.editor.model.port = model.port
-        this.servers.editor.model.password = model.password
+        this.config.serverEditor.index = index
+        let model = this.config.servers[index]
+        this.config.serverEditor.model.name = model.name
+        this.config.serverEditor.model.host = model.host
+        this.config.serverEditor.model.port = model.port
+        this.config.serverEditor.model.password = model.password
         this.showEditor()
       },
       /**
@@ -110,51 +110,22 @@
        * @param index
        */
       selectServer (index, e) {
-        if (this.servers.index === index) {
+        if (this.config.index === index) {
           return
         }
-        if (this.servers.connection) {
-          this.servers.connection.disconnect()
-          this.servers.connection = null
-          this.servers.dbIndex = null
-          this.servers.storage.index = null
-        }
         // 选中服务器
-        this.servers.index = index
-        let server = this.servers.list[index]
-        // 最多重试2次，第3次报错
-        server.retryStrategy = (times) => {
-          if (times <= 2) {
-            return 500
-          }
-          this.$message.error('连接服务器失败。')
-        }
-        // 连接服务器
-        this.servers.connection = new Redis(server)
-        // 错误信息处理
-        this.servers.connection.on('error', (_) => {
-        })
-        // 获取分区列表
-        this.servers.connection.config(['get', 'databases'], (_, reply) => {
-          if (!reply) {
-            return
-          }
-          let count = parseInt(reply[1])
-          if (!count) {
-            return
-          }
-          let dbs = []
-          for (let i = 0; i < count; i++) {
-            dbs.push(i.toString())
-          }
-          server.dbs = dbs
+        this.config.index = index
+        let server = this.config.servers[index]
+        this.config.client = new RedisClient(server)
+        this.config.client.loadDatabases((databases) => {
+          this.$set(this.config.client, 'databases', databases)
         })
       },
       /**
        * 显示服务器信息编辑窗口
        */
       showEditor () {
-        this.servers.editor.show = true
+        this.config.serverEditor.show = true
       }
     }
   }

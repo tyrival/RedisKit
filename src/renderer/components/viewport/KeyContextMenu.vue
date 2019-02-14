@@ -1,5 +1,5 @@
 <template>
-	<div v-if="servers.storage.contextMenu.index !== undefined && servers.storage.contextMenu.index !== null"
+	<div v-if="config.keyContextMenu.index !== undefined && config.keyContextMenu.index !== null"
 	     :style="calcStyle"
 	     class="context-menu">
 		<div class="item" @click="setExpireTime">
@@ -23,12 +23,12 @@
 
   export default {
     name: 'KeyContextMenu',
-    props: ['servers'],
+    props: ['config'],
     computed: {
       calcStyle () {
         return {
-          top: this.servers.storage.contextMenu.style.top + 'px',
-          left: this.servers.storage.contextMenu.style.left + 'px'
+          top: this.config.keyContextMenu.style.top + 'px',
+          left: this.config.keyContextMenu.style.left + 'px'
         }
       }
     },
@@ -46,11 +46,11 @@
         // TODO
       },
       hide () {
-        this.servers.storage.contextMenu.index = null
+        this.config.keyContextMenu.index = null
       }
     },
     watch: {
-      'servers.storage.contextMenu.index': function (val) {
+      'config.keyContextMenu.index': function (val) {
         if (val !== null && val !== undefined) {
           window.addEventListener('click', this.hide)
         } else {
