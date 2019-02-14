@@ -142,7 +142,7 @@ $menu-height: 24px;
                 border-color: $global-main-color;
                 margin-left: -15px;
                 width: 100px - $save-button-width;
-                height: $item-height;
+                height: $item-height - 2;
                 color: $global-font-color;
                 font-size: 12px;
                 border-radius: 0;
@@ -151,8 +151,9 @@ $menu-height: 24px;
 
             .el-button {
               width: $save-button-width;
-              height: $item-height;
-              line-height: $item-height;
+              height: $item-height -2;
+              line-height: $item-height -2;
+              margin-top: 1px;
               padding: 0 7px;
               border-radius: 0;
               font-size: 12px;

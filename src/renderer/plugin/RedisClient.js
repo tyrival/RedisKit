@@ -169,28 +169,44 @@ class RedisClient {
    */
   addKey (key, type, value, callback) {
     let client = this.connection
-    let cb = () => {
-      this.loadStore(callback)
-    }
-    switch (type) {
-      case 'string':
-        client.set(key, value, cb)
-        break
-      case 'hash':
-        client.hset(key, 'item', '', cb)
-        break
-      case 'list':
-        client.lpush(key, 'item', cb)
-        break
-      case 'set':
-        client.sadd(key, 'item', cb)
-        break
-      case 'zset':
-        client.zadd(key, 0, 'item', cb)
-        break
-      default:
-        break
-    }
+    client.exist(key, (_, result) => {
+      if (result) {
+        Message.error('键【' + key + '】已存在，无法新增')
+        return
+      }
+      let cb = () => {
+        this.loadStore(callback)
+      }
+      switch (type) {
+        case 'string':
+          client.set(key, value, cb)
+          break
+        case 'hash':
+          client.hset(key, 'item', '', cb)
+          break
+        case 'list':
+          client.lpush(key, 'item', cb)
+          break
+        case 'set':
+          client.sadd(key, 'item', cb)
+          break
+        case 'zset':
+          client.zadd(key, 0, 'item', cb)
+          break
+        default:
+          break
+      }
+    })
+  }
+
+  /**
+   * 保存key名称
+   * @param oldKey
+   * @param newKey
+   * @param callback
+   */
+  saveKey (oldKey, newKey, callback) {
+    debugger
   }
 
   /**
@@ -551,39 +567,46 @@ class RedisClient {
    */
   saveField (fieldValue, callback) {
     let client = this.connection
+    let key = this.model.key
     switch (this.model.type) {
       case 'string':
-        client.set(this.model.key, fieldValue, (error, result) => {
+        client.set(key, fieldValue, (error, result) => {
           this.loadValue()
           this.doCallback(callback, [error, result])
         })
         break
       case 'hash':
-        client.hset(this.model.key, this.model.field, fieldValue, (error, result) => {
+        client.hset(key, this.model.field, fieldValue, (error, result) => {
           this.loadValue()
           this.doCallback(callback, [error, result])
         })
         break
       case 'list':
-        client.lset(this.model.key, this.model.field, fieldValue, (error, result) => {
+        client.lset(key, this.model.field, fieldValue, (error, result) => {
           this.loadValue()
           this.doCallback(callback, [error, result])
         })
         break
       case 'set':
-        client.multi()
-          .srem(this.model.key, this.model.value[this.model.field])
-          .sadd(this.model.key, fieldValue)
-          .exec((error, result) => {
-            this.loadValue()
-            this.doCallback(callback, [error, result])
-          })
+        client.sismember(key, fieldValue, (_, result) => {
+          if (result) {
+            Message.error('元素【' + fieldValue + '】已存在set中')
+            return
+          }
+          client.multi()
+            .srem(key, this.model.value[this.model.field])
+            .sadd(key, fieldValue)
+            .exec((error, result) => {
+              this.loadValue()
+              this.doCallback(callback, [error, result])
+            })
+        })
         break
       case 'zset':
         let score = this.model.value[this.model.field * 2 + 1]
         client.multi()
-          .zrem(this.model.key, this.model.value[this.model.field * 2])
-          .zadd(this.model.key, score, fieldValue)
+          .zrem(key, this.model.value[this.model.field * 2])
+          .zadd(key, score, fieldValue)
           .exec((error, result) => {
             this.loadValue()
             this.doCallback(callback, [error, result])
