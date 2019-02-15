@@ -20,16 +20,15 @@ RedisKit是一款基于Electron、Vue、NodeJS开发的Redis GUI客户端，前�
 
 
 
-<div align=center><img src="(https://ws2.sinaimg.cn/large/006tKfTcgy1g074unut09j31ce0u00vu.jpg" width="85%" /></div>
+<div align=center><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g074unut09j31ce0u00vu.jpg" width="85%" /></div>
 
 
 
-<div align=center><img src="(https://ws1.sinaimg.cn/large/006tKfTcgy1g074v70sk4j31ce0u041g.jpg" width="85%" /></div>
+<div align=center><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g074v70sk4j31ce0u041g.jpg" width="85%" /></div>
 
 
 
-
-<div align=center><img src="(https://ws4.sinaimg.cn/large/006tKfTcgy1g074vljf2rj31ce0u0tbl.jpg" width="85%" /></div>
+<div align=center><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1g074vljf2rj31ce0u0tbl.jpg" width="85%" /></div>
 
 
 
