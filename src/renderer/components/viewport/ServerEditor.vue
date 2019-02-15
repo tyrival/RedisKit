@@ -1,5 +1,10 @@
 <template>
-	<el-dialog title="服务器信息" :visible.sync="config.serverEditor.show" width="40%">
+	<el-dialog title="服务器信息"
+	           :show-close="false"
+	           :close-on-click-modal="false"
+	           :close-on-press-escape="false"
+	           :visible.sync="config.serverEditor.show"
+	           width="40%">
 		<el-form :model="config.serverEditor.model"
 		         label-width="80px"
 		         size="small"

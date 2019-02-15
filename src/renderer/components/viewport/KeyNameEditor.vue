@@ -1,5 +1,6 @@
 <template>
 	<el-dialog title="键名称"
+	           :show-close="false"
 	           :visible.sync="config.keyNameEditor.key !== null && config.keyNameEditor.key !== undefined"
 	           width="35%">
 		<el-input v-model="config.keyNameEditor.model.key"

@@ -1,5 +1,5 @@
 <template>
-	<el-dialog title="新增数据" :visible.sync="config.dataEditor.show" width="35%">
+	<el-dialog title="新增数据" :show-close="false" :visible.sync="config.dataEditor.show" width="35%">
 		<el-form :model="config.dataEditor.model"
 		         label-width="60px"
 		         size="small"

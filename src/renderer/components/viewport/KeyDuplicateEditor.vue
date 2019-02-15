@@ -1,5 +1,6 @@
 <template>
 	<el-dialog title="复制键"
+	           :show-close="false"
 	           :visible.sync="config.keyDuplicateEditor.key !== null && config.keyDuplicateEditor.key !== undefined"
 	           width="35%">
 		<el-input v-model="config.keyDuplicateEditor.model.key"

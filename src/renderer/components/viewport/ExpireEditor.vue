@@ -1,5 +1,6 @@
 <template>
 	<el-dialog title="设置过期时间"
+	           :show-close="false"
 	           :visible.sync="config.expireEditor.key !== null && config.expireEditor.key !== undefined"
 	           width="35%">
 		<el-form :model="config.expireEditor.model"
