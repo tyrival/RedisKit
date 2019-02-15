@@ -37,6 +37,7 @@
 					<el-button-group>
 						<el-button @click="addHashKey"><i class="icon iconfont icon-plus"></i></el-button>
 						<el-button @click="removeHashKey"><i class="icon iconfont icon-minus"></i></el-button>
+						<el-button @click="editHashKey"><i class="icon iconfont icon-edit"></i></el-button>
 						<el-button @click="refreshValue"><i class="icon iconfont icon-refresh"></i></el-button>
 					</el-button-group>
 				</div>
@@ -46,13 +47,17 @@
 			</div>
 			<!-- list数据 -->
 			<div class="content-list" v-else-if="config.client.model.type === 'list'">
-				<div class="data-key">
+				<div class="title-header">
+					<el-col class="col-index" :span="7">索引</el-col>
+					<el-col class="col-ele" :span="17">值</el-col>
+				</div>
+				<div class="data-key with-title-header">
 					<template v-for="(item, i) in config.client.model.value">
 						<div class="el-row item item-list"
 						     :class="config.client.model.field === i ? 'is-active' : ''"
 						     @click="selectField(i)">
-							<el-col class="col-index" :span="6">{{i}}</el-col>
-							<el-col class="col-ele" :span="18">{{item}}</el-col>
+							<el-col class="col-index" :span="7">{{i}}</el-col>
+							<el-col class="col-ele" :span="17">{{item}}</el-col>
 						</div>
 					</template>
 				</div>
@@ -100,7 +105,11 @@
 			</div>
 			<!-- zset数据 -->
 			<div class="content-zset" v-else-if="config.client.model.type === 'zset'">
-				<div class="data-key">
+				<div class="title-header">
+					<el-col class="col-index" :span="12">值</el-col>
+					<el-col class="col-ele" :span="12">分数</el-col>
+				</div>
+				<div class="data-key with-title-header">
 					<template v-if="config.client.model.value && config.client.model.value.length">
 						<template v-for="i in config.client.model.value.length / 2">
 							<div class="el-row item item-list"
@@ -130,6 +139,9 @@
 						</el-button>
 						<el-button @click="removeZsetItem">
 							<i class="icon iconfont icon-minus"></i>
+						</el-button>
+						<el-button @click="editZsetScore">
+							<i class="icon iconfont icon-edit"></i>
 						</el-button>
 						<el-button v-show="this.order === 1" @click="switchOrder">
 							<i class="icon iconfont icon-asc"></i>
@@ -181,6 +193,18 @@
           return false
         }
         return true
+      },
+      /**
+       * 编辑hash key
+       * @param item
+       */
+      editHashKey () {
+        let field = this.config.client.model.field
+        if (field === undefined || field === null) {
+          this.$message({message: '未选中任何Hash Key', type: 'error', duration: 1000})
+          return
+        }
+        this.openEditKeyMode(field)
       },
       /**
        * 开启key编辑模式
@@ -328,6 +352,17 @@
           this.config.client.saveZsetScore(this.fieldEditor.value)
         }
         this.quitEditKeyMode()
+      },
+      /**
+       * 编辑zset的分数
+       */
+      editZsetScore () {
+        let index = this.config.client.model.field
+        if (index === undefined || index === null) {
+          this.$message({message: '未选中任何Zset元素', type: 'error', duration: 1000})
+          return
+        }
+        this.openEditZsetMode(index)
       },
       /**
        * 编辑zset的score

@@ -62,6 +62,38 @@ $menu-height: 24px;
       font-size: 14px;
     }
 
+    $title-header-height: 20px;
+
+    .title-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: $data-key-width;
+      background-color: $global-bg-color-secondary;
+      border-right: 1px solid $global-border-color-base;
+      height: $title-header-height;
+      line-height: $title-header-height;
+      font-size: 11px;
+      color: $global-font-color-primary;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      cursor: default;
+
+      .col-index {
+        border-right: 1px solid $global-border-color-base;
+        text-align: center;
+      }
+      .col-ele {
+        border-right: 1px solid $global-border-color-secondary;
+        padding-left: 15px;
+      }
+
+    }
+
     .data-key {
       position: absolute;
       top: 0;
@@ -71,6 +103,10 @@ $menu-height: 24px;
       border-right: 1px solid $global-border-color-base;
       overflow-x: hidden;
       overflow-y: auto;
+
+      &.with-title-header {
+        top: $title-header-height;
+      }
 
       $item-height: 30px;
 
