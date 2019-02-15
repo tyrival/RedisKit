@@ -5,7 +5,7 @@ $header-height: 32px;
 $menu-height: 24px;
 .value-panel {
   position: absolute;
-  top: $title-height;
+  top: $title-height + 1;
   left: $server-panel-width + $key-panel-width;
   right: 0;
   bottom: 0;
@@ -27,14 +27,13 @@ $menu-height: 24px;
     }
 
     .el-select {
-      margin-top: -1px;
       float: right;
 
       .el-input {
         .el-input__inner {
-          height: $header-height + 1;
           width: 80px;
-          line-height: $header-height + 1;
+          height: $header-height;
+          line-height: $header-height;
           border-radius: 0;
           -webkit-touch-callout: none;
           -webkit-user-select: none;

@@ -40,7 +40,7 @@
 						<el-button @click="refreshValue"><i class="icon iconfont icon-refresh"></i></el-button>
 					</el-button-group>
 				</div>
-				<div class="data-value">
+				<div class="data-value" v-show="config.client.model.field !== null">
 					<el-input type="textarea" v-model="config.client.model.fieldValue"></el-input>
 				</div>
 			</div>
@@ -72,7 +72,7 @@
 						</el-button>
 					</el-button-group>
 				</div>
-				<div class="data-value">
+				<div class="data-value" v-show="config.client.model.field !== null">
 					<el-input type="textarea" v-model="config.client.model.fieldValue"></el-input>
 				</div>
 			</div>
@@ -94,7 +94,7 @@
 						<el-button @click="refreshValue"><i class="icon iconfont icon-refresh"></i></el-button>
 					</el-button-group>
 				</div>
-				<div class="data-value">
+				<div class="data-value" v-show="config.client.model.field !== null">
 					<el-input type="textarea" v-model="config.client.model.fieldValue"></el-input>
 				</div>
 			</div>
@@ -142,7 +142,7 @@
 						</el-button>
 					</el-button-group>
 				</div>
-				<div class="data-value">
+				<div class="data-value" v-show="config.client.model.field !== null">
 					<el-input type="textarea" v-model="config.client.model.fieldValue"></el-input>
 				</div>
 			</div>
