@@ -5,6 +5,7 @@
 		<ValuePanel :config="config"></ValuePanel>
 		<ServerEditor :config="config"></ServerEditor>
 		<DataEditor :config="config"></DataEditor>
+		<ExpireEditor :config="config"></ExpireEditor>
 		<KeyContextMenu :config="config"></KeyContextMenu>
 	</div>
 </template>
@@ -16,6 +17,7 @@
   import ValuePanel from './viewport/ValuePanel'
   import ServerEditor from './viewport/ServerEditor'
   import DataEditor from './viewport/DataEditor'
+  import ExpireEditor from './viewport/ExpireEditor'
   import KeyContextMenu from './viewport/KeyContextMenu'
 
   export default {
@@ -36,6 +38,11 @@
           dataEditor: {
             show: false,
             model: {name: null, type: null, value: null}
+          },
+          // 设置过期时间窗口
+          expireEditor: {
+            key: null,
+            model: {mode: 0, duration: 0, timestamp: 0}
           },
           // key右键菜单
           keyContextMenu: {
@@ -58,6 +65,7 @@
       'ValuePanel': ValuePanel,
       'ServerEditor': ServerEditor,
       'DataEditor': DataEditor,
+      'ExpireEditor': ExpireEditor,
       'KeyContextMenu': KeyContextMenu
     }
   }

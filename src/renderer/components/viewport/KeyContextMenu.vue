@@ -2,13 +2,13 @@
 	<div v-if="config.keyContextMenu.index !== undefined && config.keyContextMenu.index !== null"
 	     :style="calcStyle"
 	     class="context-menu">
-		<div class="item" @click="setExpireTime">
+		<div class="item" @click="setExpire">
 			<i class="icon iconfont icon-top"></i> 设置过期时间
 		</div>
-		<div class="item" @click="setExpireTime">
+		<div class="item" @click="setExpire">
 			<i class="icon iconfont icon-top"></i> 重命名键
 		</div>
-		<div class="item" @click="setExpireTime">
+		<div class="item" @click="setExpire">
 			<i class="icon iconfont icon-top"></i> 复制键
 		</div>
 		<div class="separate-line"></div>
@@ -36,8 +36,17 @@
       /**
        * 设置过期时间
        */
-      setExpireTime () {
-        // TODO
+      setExpire () {
+        let key = this.config.client.model.key
+        this.config.client.loadExpire(key, (_, result) => {
+          if (result >= 0) {
+            this.config.expireEditor.model.duration = result
+            this.config.expireEditor.model.timestamp = result * 1000 + new Date().getTime()
+          } else {
+            this.config.expireEditor.model.timestamp = new Date()
+          }
+        })
+        this.config.expireEditor.key = key
       },
       /**
        * 删除键

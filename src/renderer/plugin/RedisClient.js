@@ -169,7 +169,7 @@ class RedisClient {
    */
   addKey (key, type, value, callback) {
     let client = this.connection
-    client.exist(key, (_, result) => {
+    client.exists(key, (_, result) => {
       if (result) {
         Message.error('键【' + key + '】已存在，无法新增')
         return
@@ -206,7 +206,16 @@ class RedisClient {
    * @param callback
    */
   saveKey (oldKey, newKey, callback) {
-    debugger
+    let client = this.connection
+    client.exists(newKey, (_, result) => {
+      if (result) {
+        Message.error('键【' + newKey + '】已存在，无法新增')
+        return
+      }
+      client.renamenx(oldKey, newKey, (err, result) => {
+        this.doCallback(callback, [err, result])
+      })
+    })
   }
 
   /**
@@ -552,11 +561,31 @@ class RedisClient {
   }
 
   /**
-   * 设置过期时间
+   * 获取过期时间
    */
-  setExpireTime (key, second, callback) {
+  loadExpire (key, callback) {
+    this.connection.ttl(key, (_, result) => {
+      this.doCallback(callback, [key, result])
+    })
+  }
+
+  /**
+   * 设置过期时间，单位：秒
+   */
+  setExpire (key, second, callback) {
     this.connection.expire(key, second, () => {
       this.doCallback(callback, [this.model, key, second])
+    })
+  }
+
+  /**
+   * 取消过期时间
+   * @param key
+   * @param callback
+   */
+  removeExpire (key, callback) {
+    this.connection.persist(key, (_, result) => {
+      this.doCallback(callback, [key, result])
     })
   }
 
