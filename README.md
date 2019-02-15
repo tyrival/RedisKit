@@ -1,12 +1,12 @@
 # RedisKit
 
-### 1. 概述
+### 概述
 
 RedisKit是一款基于Electron、Vue、NodeJS开发的Redis GUI客户端，前端使用了ElementUI组件库，redis相关功能依赖于开源项目 [ioredis](https://github.com/luin/ioredis) 。
 
 
 
-### 2. 版本
+### 版本
 
 ##### v1.0.0
 
@@ -14,7 +14,7 @@ RedisKit是一款基于Electron、Vue、NodeJS开发的Redis GUI客户端，前�
 
 
 
-### 3. 截图
+### 截图
 
 ![image-20190215151900019](https://ws1.sinaimg.cn/large/006tKfTcgy1g074ua9psrj31ce0u0q5n.jpg)
 
@@ -32,7 +32,7 @@ RedisKit是一款基于Electron、Vue、NodeJS开发的Redis GUI客户端，前�
 
 
 
-### 4. 安装程序
+### 安装程序
 
 - [Mac OS](https://github.com/tyrival/RedisKit/releases/download/v1.0.0/RedisKit-1.0.0.dmg)
 
@@ -41,7 +41,7 @@ RedisKit是一款基于Electron、Vue、NodeJS开发的Redis GUI客户端，前�
 
 
 
-### 5. 编译
+### 编译
 
 首先需要安装新版的NodeJS，进入工程安装依赖包 `npm install` ，然后可使用如下命令：
 
