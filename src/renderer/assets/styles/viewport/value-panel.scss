@@ -87,6 +87,7 @@ $menu-height: 24px;
         border-right: 1px solid $global-border-color-base;
         text-align: center;
       }
+
       .col-ele {
         border-right: 1px solid $global-border-color-secondary;
         padding-left: 15px;
@@ -187,8 +188,8 @@ $menu-height: 24px;
 
             .el-button {
               width: $save-button-width;
-              height: $item-height -2;
-              line-height: $item-height -2;
+              height: $item-height - 2;
+              line-height: $item-height - 2;
               margin-top: 1px;
               padding: 0 7px;
               border-radius: 0;
