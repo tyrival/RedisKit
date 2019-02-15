@@ -6,7 +6,7 @@ $item-height: 32px;
 $menu-height: 24px;
 .server-panel {
   position: absolute;
-  top: 0;
+  top: $title-height;
   left: 0;
   bottom: 0;
   width: $server-panel-width;

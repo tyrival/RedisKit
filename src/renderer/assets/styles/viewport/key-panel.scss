@@ -5,7 +5,7 @@ $filter-height: 32px;
 $menu-height: 24px;
 .key-panel {
   position: absolute;
-  top: 0;
+  top: $title-height;
   left: $server-panel-width;
   bottom: 0;
   width: $key-panel-width;

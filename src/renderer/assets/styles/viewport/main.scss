@@ -1,4 +1,5 @@
 @import '../common/theme/index';
+@import './variables';
 
 body {
   margin: 0;
@@ -11,4 +12,26 @@ body {
   right: 0;
   bottom: 0;
   background-color: $global-bg-color;
+}
+
+.title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $title-height;
+  line-height: $title-height;
+  background-color: transparent;
+  border-bottom: 1px solid $global-border-color-base;
+  color: #ffffff;
+  font-size: 12px;
+  text-align: center;
+  z-index: 10;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-app-region: drag;
 }

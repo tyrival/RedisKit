@@ -5,7 +5,7 @@ $header-height: 32px;
 $menu-height: 24px;
 .value-panel {
   position: absolute;
-  top: 0;
+  top: $title-height;
   left: $server-panel-width + $key-panel-width;
   right: 0;
   bottom: 0;
@@ -67,10 +67,11 @@ $menu-height: 24px;
       position: absolute;
       top: 0;
       left: 0;
-      bottom: 0;
+      bottom: $menu-height;
       width: $data-key-width;
       border-right: 1px solid $global-border-color-base;
-      overflow: auto;
+      overflow-x: hidden;
+      overflow-y: auto;
 
       $item-height: 30px;
 

@@ -32,13 +32,13 @@
 							<span v-show="!fieldEditor.show || config.client.model.field !== field">{{field}}</span>
 						</div>
 					</template>
-					<div class="el-row menu">
-						<el-button-group>
-							<el-button @click="addHashKey"><i class="icon iconfont icon-plus"></i></el-button>
-							<el-button @click="removeHashKey"><i class="icon iconfont icon-minus"></i></el-button>
-							<el-button @click="refreshValue"><i class="icon iconfont icon-refresh"></i></el-button>
-						</el-button-group>
-					</div>
+				</div>
+				<div class="el-row menu">
+					<el-button-group>
+						<el-button @click="addHashKey"><i class="icon iconfont icon-plus"></i></el-button>
+						<el-button @click="removeHashKey"><i class="icon iconfont icon-minus"></i></el-button>
+						<el-button @click="refreshValue"><i class="icon iconfont icon-refresh"></i></el-button>
+					</el-button-group>
 				</div>
 				<div class="data-value">
 					<el-input type="textarea" v-model="config.client.model.fieldValue"></el-input>
@@ -55,22 +55,22 @@
 							<el-col class="col-ele" :span="18">{{item}}</el-col>
 						</div>
 					</template>
-					<div class="el-row menu">
-						<el-button-group>
-							<el-button @click="unshiftListItem">
-								<i class="icon iconfont icon-unshift"></i>
-							</el-button>
-							<el-button @click="pushListItem">
-								<i class="icon iconfont icon-push"></i>
-							</el-button>
-							<el-button @click="removeListItem">
-								<i class="icon iconfont icon-minus"></i>
-							</el-button>
-							<el-button @click="refreshValue">
-								<i class="icon iconfont icon-refresh"></i>
-							</el-button>
-						</el-button-group>
-					</div>
+				</div>
+				<div class="el-row menu">
+					<el-button-group>
+						<el-button @click="unshiftListItem">
+							<i class="icon iconfont icon-unshift"></i>
+						</el-button>
+						<el-button @click="pushListItem">
+							<i class="icon iconfont icon-push"></i>
+						</el-button>
+						<el-button @click="removeListItem">
+							<i class="icon iconfont icon-minus"></i>
+						</el-button>
+						<el-button @click="refreshValue">
+							<i class="icon iconfont icon-refresh"></i>
+						</el-button>
+					</el-button-group>
 				</div>
 				<div class="data-value">
 					<el-input type="textarea" v-model="config.client.model.fieldValue"></el-input>
@@ -86,13 +86,13 @@
 							{{item}}
 						</div>
 					</template>
-					<div class="el-row menu">
-						<el-button-group>
-							<el-button @click="addSetItem"><i class="icon iconfont icon-plus"></i></el-button>
-							<el-button @click="removeSetItem"><i class="icon iconfont icon-minus"></i></el-button>
-							<el-button @click="refreshValue"><i class="icon iconfont icon-refresh"></i></el-button>
-						</el-button-group>
-					</div>
+				</div>
+				<div class="el-row menu">
+					<el-button-group>
+						<el-button @click="addSetItem"><i class="icon iconfont icon-plus"></i></el-button>
+						<el-button @click="removeSetItem"><i class="icon iconfont icon-minus"></i></el-button>
+						<el-button @click="refreshValue"><i class="icon iconfont icon-refresh"></i></el-button>
+					</el-button-group>
 				</div>
 				<div class="data-value">
 					<el-input type="textarea" v-model="config.client.model.fieldValue"></el-input>
@@ -122,25 +122,25 @@
 							</div>
 						</template>
 					</template>
-					<div class="el-row menu">
-						<el-button-group>
-							<el-button @click="addZsetItem">
-								<i class="icon iconfont icon-plus"></i>
-							</el-button>
-							<el-button @click="removeZsetItem">
-								<i class="icon iconfont icon-minus"></i>
-							</el-button>
-							<el-button v-show="this.order === 1" @click="switchOrder">
-								<i class="icon iconfont icon-asc"></i>
-							</el-button>
-							<el-button v-show="this.order === 0" @click="switchOrder">
-								<i class="icon iconfont icon-desc"></i>
-							</el-button>
-							<el-button @click="refreshValue">
-								<i class="icon iconfont icon-refresh"></i>
-							</el-button>
-						</el-button-group>
-					</div>
+				</div>
+				<div class="el-row menu">
+					<el-button-group>
+						<el-button @click="addZsetItem">
+							<i class="icon iconfont icon-plus"></i>
+						</el-button>
+						<el-button @click="removeZsetItem">
+							<i class="icon iconfont icon-minus"></i>
+						</el-button>
+						<el-button v-show="this.order === 1" @click="switchOrder">
+							<i class="icon iconfont icon-asc"></i>
+						</el-button>
+						<el-button v-show="this.order === 0" @click="switchOrder">
+							<i class="icon iconfont icon-desc"></i>
+						</el-button>
+						<el-button @click="refreshValue">
+							<i class="icon iconfont icon-refresh"></i>
+						</el-button>
+					</el-button-group>
 				</div>
 				<div class="data-value">
 					<el-input type="textarea" v-model="config.client.model.fieldValue"></el-input>
