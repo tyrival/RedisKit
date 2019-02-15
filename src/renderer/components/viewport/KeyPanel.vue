@@ -126,6 +126,10 @@
        * 增加数据
        */
       addKey () {
+        if (!this.config.client.config.db) {
+          this.$message({message: '请先选择数据库。', type: 'error', duration: 1000})
+          return
+        }
         this.config.dataEditor.model.name = null
         this.config.dataEditor.model.type = 'string'
         this.config.dataEditor.model.value = null
@@ -137,7 +141,7 @@
       removeKey () {
         let key = this.config.client.model.key
         if (key === undefined || key === null) {
-          this.$message({message: '未选中任何键', type: 'error', duration: 1000})
+          this.$message({message: '未选中任何键。', type: 'error', duration: 1000})
           return
         }
         this.$confirm('是否确定删除此键？', '提示', {
@@ -196,6 +200,10 @@
        * 刷新key
        */
       refreshKey () {
+        if (!this.config.client.config.db) {
+          this.$message({message: '请先选择数据库。', type: 'error', duration: 1000})
+          return
+        }
         this.config.client.loadStore()
       }
     }

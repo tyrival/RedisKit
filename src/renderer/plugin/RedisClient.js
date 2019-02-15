@@ -103,6 +103,9 @@ class RedisClient {
    * 加载数据key
    */
   loadStore (callback) {
+    if (!this.config.db) {
+      return
+    }
     this.resetStore()
     this.connection = new Redis(this.config)
     // 查询所有key
@@ -196,6 +199,9 @@ class RedisClient {
    * 增加key
    */
   addKey (key, type, value, callback) {
+    if (!this.config.db) {
+      return
+    }
     let client = this.connection
     client.exists(key, (_, result) => {
       if (result) {
