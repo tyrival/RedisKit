@@ -24,7 +24,7 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 563,
+    height: 620,
     useContentSize: true,
     titleBarStyle: 'hidden',
     // 隐藏标题栏
