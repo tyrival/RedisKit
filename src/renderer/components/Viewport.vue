@@ -6,6 +6,7 @@
 		<ServerEditor :config="config"></ServerEditor>
 		<DataEditor :config="config"></DataEditor>
 		<ExpireEditor :config="config"></ExpireEditor>
+		<KeyNameEditor :config="config"></KeyNameEditor>
 		<KeyContextMenu :config="config"></KeyContextMenu>
 	</div>
 </template>
@@ -18,6 +19,7 @@
   import ServerEditor from './viewport/ServerEditor'
   import DataEditor from './viewport/DataEditor'
   import ExpireEditor from './viewport/ExpireEditor'
+  import KeyNameEditor from './viewport/KeyNameEditor'
   import KeyContextMenu from './viewport/KeyContextMenu'
 
   export default {
@@ -44,6 +46,11 @@
             key: null,
             model: {mode: 0, duration: 0, timestamp: 0}
           },
+          // 重命名Key窗口
+          keyNameEditor: {
+            key: null,
+            model: {key: null}
+          },
           // key右键菜单
           keyContextMenu: {
             index: null,
@@ -66,6 +73,7 @@
       'ServerEditor': ServerEditor,
       'DataEditor': DataEditor,
       'ExpireEditor': ExpireEditor,
+      'KeyNameEditor': KeyNameEditor,
       'KeyContextMenu': KeyContextMenu
     }
   }

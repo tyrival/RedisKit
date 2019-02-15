@@ -243,7 +243,19 @@
        * 删除hash key
        */
       removeHashKey () {
-        this.config.client.removeHashField(this.config.client.model.field)
+        let field = this.config.client.model.field
+        if (field === undefined || field === null) {
+          this.$message({message: '未选中任何Hash Key', type: 'error', duration: 1000})
+          return
+        }
+        this.$confirm('是否确定删除此属性？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.config.client.removeHashField(field)
+        }).catch(() => {
+        })
       },
       /**
        * 保存hashkey
@@ -271,7 +283,18 @@
        * 删除list元素
        */
       removeListItem () {
-        this.config.client.removeListItem(this.config.client.model.field)
+        let index = this.config.client.model.field
+        if (index === undefined || index === null) {
+          this.$message({message: '未选中任何数组元素', type: 'error', duration: 1000})
+          return
+        }
+        this.$confirm('是否确定删除此数组元素？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.config.client.removeListItem(index)
+        })
       },
       /**
        * 增加set元素
@@ -283,7 +306,18 @@
        * 删除set元素
        */
       removeSetItem () {
-        this.config.client.removeSetItem(this.config.client.model.fieldValue)
+        let item = this.config.client.model.fieldValue
+        if (item === undefined) {
+          this.$message({message: '未选中任何集合元素', type: 'error', duration: 1000})
+          return
+        }
+        this.$confirm('是否确定删除此元素？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.config.client.removeSetItem(item)
+        })
       },
       /**
        * 保存zset的分数
@@ -312,7 +346,18 @@
        * 删除set元素
        */
       removeZsetItem () {
-        this.config.client.removeZsetItem(this.config.client.model.fieldValue)
+        let item = this.config.client.model.fieldValue
+        if (item === undefined || item === null) {
+          this.$message({message: '未选中任何集合元素', type: 'error', duration: 1000})
+          return
+        }
+        this.$confirm('是否确定删除此元素？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.config.client.removeZsetItem(item)
+        })
       }
     },
     watch: {

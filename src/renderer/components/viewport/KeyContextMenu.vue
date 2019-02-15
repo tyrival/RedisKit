@@ -5,7 +5,7 @@
 		<div class="item" @click="setExpire">
 			<i class="icon iconfont icon-top"></i> 设置过期时间
 		</div>
-		<div class="item" @click="setExpire">
+		<div class="item" @click="renameKey">
 			<i class="icon iconfont icon-top"></i> 重命名键
 		</div>
 		<div class="item" @click="setExpire">
@@ -47,6 +47,13 @@
           }
         })
         this.config.expireEditor.key = key
+      },
+      /**
+       * 重命名键
+       */
+      renameKey () {
+        this.config.keyNameEditor.key = this.config.client.model.key
+        this.config.keyNameEditor.model.key = this.config.client.model.key
       },
       /**
        * 删除键

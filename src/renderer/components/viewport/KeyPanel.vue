@@ -33,6 +33,9 @@
 			<el-button-group>
 				<el-button @click="addKey"><i class="icon iconfont icon-plus"></i></el-button>
 				<el-button @click="removeKey"><i class="icon iconfont icon-minus"></i></el-button>
+				<el-button @click="duplicateKey"><i class="icon iconfont icon-duplicate"></i></el-button>
+				<el-button @click="setExpire"><i class="icon iconfont icon-time"></i></el-button>
+				<el-button @click="renameKey"><i class="icon iconfont icon-edit"></i></el-button>
 				<el-button @click="refreshKey"><i class="icon iconfont icon-refresh"></i></el-button>
 			</el-button-group>
 		</div>
@@ -132,7 +135,50 @@
        * 删除键
        */
       removeKey () {
-        this.config.client.removeKey(this.config.client.model.key)
+        let key = this.config.client.model.key
+        if (key === undefined || key === null) {
+          this.$message({message: '未选中任何键', type: 'error', duration: 1000})
+          return
+        }
+        this.$confirm('是否确定删除此键？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.config.client.removeKey(key)
+        }).catch(() => {
+        })
+      },
+      /**
+       * 设置过期时间
+       */
+      setExpire () {
+        let key = this.config.client.model.key
+        if (key === null || key === undefined) {
+          this.$message({message: '未选中任何键', type: 'error', duration: 1000})
+          return
+        }
+        this.config.client.loadExpire(key, (_, result) => {
+          if (result >= 0) {
+            this.config.expireEditor.model.duration = result
+            this.config.expireEditor.model.timestamp = result * 1000 + new Date().getTime()
+          } else {
+            this.config.expireEditor.model.timestamp = new Date()
+          }
+        })
+        this.config.expireEditor.key = key
+      },
+      /**
+       * 重命名键
+       */
+      renameKey () {
+        let key = this.config.client.model.key
+        if (key === null || key === undefined) {
+          this.$message({message: '未选中任何键', type: 'error', duration: 1000})
+          return
+        }
+        this.config.keyNameEditor.key = key
+        this.config.keyNameEditor.model.key = key
       },
       /**
        * 刷新key

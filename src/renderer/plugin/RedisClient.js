@@ -1,5 +1,5 @@
 import Redis from 'ioredis'
-import {Message, MessageBox} from 'element-ui'
+import {Message} from 'element-ui'
 
 class RedisClient {
   constructor (config) {
@@ -212,7 +212,8 @@ class RedisClient {
         Message.error('键【' + newKey + '】已存在，无法新增')
         return
       }
-      client.renamenx(oldKey, newKey, (err, result) => {
+      client.rename(oldKey, newKey, (err, result) => {
+        this.loadStore()
         this.doCallback(callback, [err, result])
       })
     })
@@ -224,19 +225,11 @@ class RedisClient {
    * @param callback
    */
   removeKey (key, callback) {
-    if (key === undefined || key === null) {
-      Message({message: '未选中任何键', type: 'error', duration: 1000})
+    if (key === null || key === undefined) {
       return
     }
-    MessageBox.confirm('是否确定删除此键？', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(() => {
-      this.connection.del(key, (_, result) => {
-        this.loadStore(callback)
-      })
-    }).catch(() => {
+    this.connection.del(key, (_, result) => {
+      this.loadStore(callback)
     })
   }
 
@@ -344,19 +337,11 @@ class RedisClient {
    */
   removeHashField (field, callback) {
     if (field === undefined || field === null) {
-      Message({message: '未选中任何Hash Key', type: 'error', duration: 1000})
       return
     }
-    MessageBox.confirm('是否确定删除此属性？', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(() => {
-      this.connection.hdel(this.model.key, this.model.field, () => {
-        this.loadValue()
-        this.doCallback(callback, [this.model, field])
-      })
-    }).catch(() => {
+    this.connection.hdel(this.model.key, this.model.field, () => {
+      this.loadValue()
+      this.doCallback(callback, [this.model, field])
     })
   }
 
@@ -389,25 +374,16 @@ class RedisClient {
    */
   removeListItem (index, callback) {
     if (index === undefined || index === null) {
-      Message({message: '未选中任何数组元素', type: 'error', duration: 1000})
       return
     }
-    MessageBox.confirm('是否确定删除此数组元素？', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(() => {
-      let val = 'DELETE' + new Date().getTime()
-      this.connection.multi()
-        .lset(this.model.key, index, val)
-        .lrem(this.model.key, 0, val)
-        .exec(() => {
-          this.model.value.splice(index, 1)
-          this.doCallback(callback, [this.model, index])
-        })
-    }).catch(() => {
-      this.doCallback(callback, [this.model, index])
-    })
+    let val = 'DELETE' + new Date().getTime()
+    this.connection.multi()
+      .lset(this.model.key, index, val)
+      .lrem(this.model.key, 0, val)
+      .exec(() => {
+        this.model.value.splice(index, 1)
+        this.doCallback(callback, [this.model, index])
+      })
   }
 
   /**
@@ -449,29 +425,20 @@ class RedisClient {
    */
   removeSetItem (item, callback) {
     if (item === undefined || item === null) {
-      Message({message: '未选中任何集合元素', type: 'error', duration: 1000})
       return
     }
-    MessageBox.confirm('是否确定删除此元素？', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(() => {
-      let set = this.model.value
-      this.connection.srem(this.model.key, item).then(() => {
-        if (set && set.length) {
-          for (let i = 0; i < set.length; i++) {
-            let ele = set[i]
-            if (ele === item) {
-              set.splice(i, 1)
-              break
-            }
+    let set = this.model.value
+    this.connection.srem(this.model.key, item).then(() => {
+      if (set && set.length) {
+        for (let i = 0; i < set.length; i++) {
+          let ele = set[i]
+          if (ele === item) {
+            set.splice(i, 1)
+            break
           }
-          this.doCallback(callback, [this.model, item])
         }
-      })
-    }).catch(() => {
-      this.doCallback(callback, [this.model, item])
+        this.doCallback(callback, [this.model, item])
+      }
     })
   }
 
@@ -518,27 +485,18 @@ class RedisClient {
    */
   removeZsetItem (item, callback) {
     if (item === undefined || item === null) {
-      Message({message: '未选中任何集合元素', type: 'error', duration: 1000})
       return
     }
-    MessageBox.confirm('是否确定删除此元素？', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(() => {
-      this.connection.zrem(this.model.key, item).then(() => {
-        if (this.model.value && this.model.value.length) {
-          for (let i = 0; i < this.model.value.length; i++) {
-            let ele = this.model.value[i]
-            if (ele === item) {
-              this.model.value.splice(i, 2)
-              break
-            }
+    this.connection.zrem(this.model.key, item).then(() => {
+      if (this.model.value && this.model.value.length) {
+        for (let i = 0; i < this.model.value.length; i++) {
+          let ele = this.model.value[i]
+          if (ele === item) {
+            this.model.value.splice(i, 2)
+            break
           }
         }
-        this.doCallback(callback, [this.model, item])
-      })
-    }).catch(() => {
+      }
       this.doCallback(callback, [this.model, item])
     })
   }
