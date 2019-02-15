@@ -200,8 +200,9 @@ $menu-height: 24px;
     height: $menu-height;
     left: 0;
     bottom: 0;
-    width: $key-panel-width;
+    width: $key-panel-width + 1;
     border-top: 1px solid $global-border-color-base;
+    border-right: 1px solid $global-border-color-base;
 
     .el-button-group {
       margin-top: -1px;

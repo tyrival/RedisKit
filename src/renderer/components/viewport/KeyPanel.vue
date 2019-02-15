@@ -1,5 +1,6 @@
 <template>
-	<div class="key-panel">
+	<div class="key-panel"
+	     v-if="config.client">
 		<div class="filter">
 			<el-input placeholder="请输入筛选条件"
 			          suffix-icon="el-icon-search"
