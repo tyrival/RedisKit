@@ -87,10 +87,10 @@
        */
       addServer () {
         this.config.serverEditor.index = null
-        this.config.serverEditor.model.name = null
-        this.config.serverEditor.model.host = null
-        this.config.serverEditor.model.port = null
-        this.config.serverEditor.model.password = null
+        this.$set(this.config.serverEditor, 'model', {
+          singleMode: true,
+          cluster: [{host: null, port: null, password: null}]
+        })
         this.showEditor()
       },
       /**
@@ -102,10 +102,8 @@
         e.stopPropagation()
         this.config.serverEditor.index = index
         let model = this.config.servers[index]
-        this.config.serverEditor.model.name = model.name
-        this.config.serverEditor.model.host = model.host
-        this.config.serverEditor.model.port = model.port
-        this.config.serverEditor.model.password = model.password
+        this.$set(this.config.serverEditor, 'model', model)
+        this.$set(this.config.serverEditor, 'model', model)
         this.showEditor()
       },
       /**

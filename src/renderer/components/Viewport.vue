@@ -37,7 +37,10 @@
           serverEditor: {
             show: false,
             index: null,
-            model: {name: null, host: null, port: null, password: null}
+            model: {
+              singleMode: true,
+              cluster: [{host: null, port: null, password: null}]
+            }
           },
           dataEditor: {
             show: false,

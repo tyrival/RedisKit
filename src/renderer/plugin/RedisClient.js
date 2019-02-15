@@ -1,18 +1,17 @@
 /**
  属性如下：
  config: {
+    singleMode: Boolean || true,
     name: String || '默认服务器',
-      host: String || 'localhost',
-      port: Integer || 6379,
-      password: String | '',
-      db: String || null,
-      retryStrategy: Function || function (times) {
+    db: String || null,
+    cluster: Array || [],
+    retryStrategy: Function || function (times) {
       if (times <= 2) {
         return 500
       }
       Message.error('连接服务器失败。')
     },
-      onError: Function
+    onError: Function
   }
  format: 'RAW'/'JSON' | 'RAW'
  databases: Array
@@ -35,23 +34,29 @@ class RedisClient {
       throw new Error('RedisKit构造参数出错。')
     }
     this.resetModel()
-    this.config = Object.assign({
-      host: 'localhost',
-      port: 6379,
-      password: '',
-      retryStrategy: function (times) {
-        if (times <= 2) {
-          return 500
-        }
-        Message.error('连接服务器失败。')
-      },
-      onError: null
-    }, config)
-    this.config.host = this.config.host || 'localhost'
-    this.config.port = this.config.port || 6379
+    let retryStrategy = function (times) {
+      if (times <= 2) {
+        return 500
+      }
+      Message.error('连接服务器失败。')
+    }
+    this.config = config
+    for (let i = 0; i < this.config.cluster.length; i++) {
+      let server = this.config.cluster[i]
+      server.host = server.host || 'localhost'
+      server.port = server.port || 6379
+    }
+    if (this.config.singleMode) {
+      let server = this.config.cluster[0]
+      server.retryStrategy = retryStrategy
+      this.connection = new Redis(server)
+    } else {
+      let option = {retryStrategy: retryStrategy}
+      debugger
+      this.connection = new Redis.Cluster(this.config.cluster, option)
+    }
     this.databases = []
     this.store = []
-    this.connection = new Redis(this)
     this.format = 'RAW'
     // 注册统一错误处理
     if (this.config.onError && typeof this.config.onError) {
