@@ -8,7 +8,7 @@
 		<div class="item" @click="renameKey">
 			<i class="icon iconfont icon-top"></i> 重命名键
 		</div>
-		<div class="item" @click="setExpire">
+		<div class="item" @click="duplicateKey">
 			<i class="icon iconfont icon-top"></i> 复制键
 		</div>
 		<div class="separate-line"></div>
@@ -56,10 +56,26 @@
         this.config.keyNameEditor.model.key = this.config.client.model.key
       },
       /**
+       * 复制键
+       */
+      duplicateKey () {
+        let key = this.config.client.model.key
+        this.config.keyDuplicateEditor.key = key
+        this.config.keyDuplicateEditor.model.key = key + ' DUP'
+      },
+      /**
        * 删除键
        */
       deleteKey () {
-        // TODO
+        let key = this.config.client.model.key
+        this.$confirm('是否确定删除此键？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.config.client.removeKey(key)
+        }).catch(() => {
+        })
       },
       hide () {
         this.config.keyContextMenu.index = null

@@ -1,5 +1,5 @@
 {
-  "name": "rediskit",
+  "name": "RedisKit",
   "version": "0.0.1",
   "author": "tyrival <tyrival@qq.com>",
   "description": "Redis management app.",
@@ -19,7 +19,7 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "rediskit",
+    "productName": "RedisKit",
     "appId": "com.tyrival.rediskit",
     "directories": {
       "output": "build"

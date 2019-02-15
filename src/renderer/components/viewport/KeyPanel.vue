@@ -181,6 +181,18 @@
         this.config.keyNameEditor.model.key = key
       },
       /**
+       * 复制键
+       */
+      duplicateKey () {
+        let key = this.config.client.model.key
+        if (key === null || key === undefined) {
+          this.$message({message: '未选中任何键', type: 'error', duration: 1000})
+          return
+        }
+        this.config.keyDuplicateEditor.key = key
+        this.config.keyDuplicateEditor.model.key = key + ' DUP'
+      },
+      /**
        * 刷新key
        */
       refreshKey () {
