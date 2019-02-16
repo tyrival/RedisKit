@@ -34,20 +34,32 @@ class RedisClient {
       throw new Error('RedisKit构造参数出错。')
     }
     this.resetModel()
-    let retryStrategy = function (times) {
-      if (times <= 2) {
-        return 500
-      }
-      Message.error('连接服务器失败，请检查服务器或网络。')
-    }
+    this.databases = []
+    this.store = []
+    this.format = 'RAW'
     this.config = config
     for (let i = 0; i < this.config.cluster.length; i++) {
       let server = this.config.cluster[i]
       server.host = server.host || 'localhost'
       server.port = server.port || 6379
     }
+    this.initConnection()
+  }
+
+  /**
+   * 初始化连接
+   */
+  initConnection () {
+    // 连接服务器重试三次
+    let retryStrategy = (times) => {
+      if (times <= 2) {
+        return 500
+      }
+      Message.error('连接【' + this.config.name + '】失败，请检查服务器或网络。')
+    }
     if (this.config.singleMode) {
       let server = this.config.cluster[0]
+      server.db = this.config.db
       server.retryStrategy = retryStrategy
       this.connection = new Redis(server)
     } else {
@@ -56,9 +68,6 @@ class RedisClient {
       }
       this.connection = new Redis.Cluster(this.config.cluster, options)
     }
-    this.databases = []
-    this.store = []
-    this.format = 'RAW'
     // 注册统一错误处理
     if (this.config.onError && typeof this.config.onError) {
       this.connection.on('error', this.config.onError)
@@ -89,18 +98,13 @@ class RedisClient {
   }
 
   /**
-   * 获取数据库列表
-   * @returns {Array}
-   */
-  getDatabases () {
-    return this.databases
-  }
-
-  /**
    * 选择数据库
    * @param db
    */
   selectDatabase (db, callback) {
+    if (!this.config.singleMode) {
+      Message.error('集群模式无法选择数据库')
+    }
     this.config.db = db
     this.loadStore(callback)
   }
@@ -113,7 +117,7 @@ class RedisClient {
       return
     }
     this.resetStore()
-    this.connection = new Redis(this.config)
+    this.initConnection()
     // 查询所有key
     this.connection.keys(['*'], (_, reply) => {
       if (!reply || !reply.length) {

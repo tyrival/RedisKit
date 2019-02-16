@@ -109,6 +109,10 @@
         }
         this.config.serverEditor.show = false
         this.$dbServers(this.config.servers)
+        if (this.config.serverEditor.index === this.config.index) {
+          this.config.index = null
+          this.config.client = null
+        }
       },
       /**
        * 增加节点
