@@ -38,7 +38,7 @@ class RedisClient {
       if (times <= 2) {
         return 500
       }
-      Message.error('连接服务器失败。')
+      Message.error('连接服务器失败，请检查服务器或网络。')
     }
     this.config = config
     for (let i = 0; i < this.config.cluster.length; i++) {
@@ -51,9 +51,10 @@ class RedisClient {
       server.retryStrategy = retryStrategy
       this.connection = new Redis(server)
     } else {
-      let option = {retryStrategy: retryStrategy}
-      debugger
-      this.connection = new Redis.Cluster(this.config.cluster, option)
+      let options = {
+        clusterRetryStrategy: retryStrategy
+      }
+      this.connection = new Redis.Cluster(this.config.cluster, options)
     }
     this.databases = []
     this.store = []
