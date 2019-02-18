@@ -2,6 +2,7 @@
  属性如下：
  config: {
     singleMode: Boolean || true,
+    nat: Boolean || false,
     name: String || '默认服务器',
     db: String || null,
     cluster: Array || [],
@@ -25,8 +26,10 @@
     fieldValue: Object || null
   }
  */
-import Redis from 'ioredis'
+// import Redis from 'ioredis'
 import {Message} from 'element-ui'
+
+const Redis = require('ioredis')
 
 class RedisClient {
   constructor (config) {
@@ -63,10 +66,18 @@ class RedisClient {
       server.retryStrategy = retryStrategy
       this.connection = new Redis(server)
     } else {
+      let cluster = this.config.cluster
       let options = {
         clusterRetryStrategy: retryStrategy
       }
-      this.connection = new Redis.Cluster(this.config.cluster, options)
+      if (this.config.nat && cluster && cluster.length) {
+        options.natMap = {}
+        for (let i = 0; i < cluster.length; i++) {
+          let server = cluster[i]
+          options.natMap[server.nat] = server
+        }
+      }
+      this.connection = new Redis.Cluster(cluster, options)
     }
     // 注册统一错误处理
     if (this.config.onError && typeof this.config.onError) {

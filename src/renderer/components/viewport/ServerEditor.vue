@@ -1,13 +1,14 @@
 <template>
 	<el-dialog title="服务器信息"
+	           top="22px"
 	           :show-close="false"
 	           :close-on-click-modal="false"
 	           :close-on-press-escape="false"
 	           :visible.sync="config.serverEditor.show"
-	           :width="config.serverEditor.model.singleMode ? '40%' : '60%'">
+	           :width="config.serverEditor.model.singleMode ? '35%' : '75%'">
 		<el-form :model="config.serverEditor.model"
 		         label-width="60px"
-		         size="small"
+		         size="mini"
 		         :rules="rules"
 		         ref="serverEditorForm">
 			<el-form-item label="">
@@ -37,28 +38,37 @@
 				</el-form-item>
 			</template>
 			<template v-else>
+				<el-form-item label="NAT">
+					<el-switch active-text="" v-model="config.serverEditor.model.nat">
+					</el-switch>
+				</el-form-item>
 				<template v-for="(node, i) in config.serverEditor.model.cluster">
 					<el-row>
-						<el-col :span="9">
+						<el-col :span="config.serverEditor.model.nat ? 6 : 9">
 							<el-form-item label="服务器">
 								<el-input v-model="node.host" autocomplete="off" placeholder="localhost" clearable></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="5">
+						<el-col :span="config.serverEditor.model.nat ? 4 : 5">
 							<el-form-item label="端口">
 								<el-input v-model="node.port" autocomplete="off" placeholder="6379"></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="8">
+						<el-col :span="config.serverEditor.model.nat ? 6 : 9">
 							<el-form-item label="密码">
 								<el-input v-model="node.password" autocomplete="off" clearable></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="2" style="text-align: center">
+						<el-col v-if="config.serverEditor.model.nat" :span="7">
+							<el-form-item label="NAT">
+								<el-input v-model="node.nat" autocomplete="off" clearable></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="1" style="text-align: center">
 							<el-button v-if="i !== 0"
 							           size="mini"
 							           icon="icon iconfont icon-minus"
-							           circle
+							           type="text"
 							           @click="deleteNode(i)"></el-button>
 						</el-col>
 					</el-row>

@@ -89,6 +89,7 @@
         this.config.serverEditor.index = null
         this.$set(this.config.serverEditor, 'model', {
           singleMode: true,
+          nat: false,
           cluster: [{host: null, port: null, password: null}]
         })
         this.showEditor()
@@ -118,9 +119,20 @@
         this.config.index = index
         let server = this.config.servers[index]
         this.config.client = new RedisClient(server)
-        this.config.client.loadDatabases((databases) => {
-          this.$set(this.config.client, 'databases', databases)
-        })
+        if (this.config.client.config.singleMode) {
+          this.config.client.loadDatabases((databases) => {
+            this.$set(this.config.client, 'databases', databases)
+          })
+        } else {
+          debugger
+          this.config.client.connection.set('foo', 'bar1', (_, res) => {
+            console.log(res)
+          })
+          this.config.client.connection.get('foo', function (_, res) {
+            // res === 'bar'
+            console.log(res)
+          })
+        }
       },
       /**
        * 显示服务器信息编辑窗口

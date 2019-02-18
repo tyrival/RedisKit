@@ -39,6 +39,7 @@
             index: null,
             model: {
               singleMode: true,
+              nat: false,
               cluster: [{host: null, port: null, password: null}]
             }
           },

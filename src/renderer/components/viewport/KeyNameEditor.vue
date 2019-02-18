@@ -1,5 +1,6 @@
 <template>
 	<el-dialog title="键名称"
+	           top="22px"
 	           :show-close="false"
 	           :visible.sync="config.keyNameEditor.key !== null && config.keyNameEditor.key !== undefined"
 	           width="35%">

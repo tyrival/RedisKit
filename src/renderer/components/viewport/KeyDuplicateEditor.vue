@@ -1,5 +1,6 @@
 <template>
 	<el-dialog title="复制键"
+	           top="22px"
 	           :show-close="false"
 	           :visible.sync="config.keyDuplicateEditor.key !== null && config.keyDuplicateEditor.key !== undefined"
 	           width="35%">

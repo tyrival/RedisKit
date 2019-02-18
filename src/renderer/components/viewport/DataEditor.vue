@@ -1,8 +1,12 @@
 <template>
-	<el-dialog title="新增数据" :show-close="false" :visible.sync="config.dataEditor.show" width="35%">
+	<el-dialog title="新增数据"
+	           top="22px"
+	           :show-close="false"
+	           :visible.sync="config.dataEditor.show"
+	           width="35%">
 		<el-form :model="config.dataEditor.model"
 		         label-width="60px"
-		         size="small"
+		         size="mini"
 		         :rules="rules"
 		         ref="dataEditorForm"
 		         clearable>
