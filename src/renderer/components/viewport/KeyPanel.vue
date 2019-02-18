@@ -8,7 +8,7 @@
 			          clearable>
 			</el-input>
 		</div>
-		<div class="tab-db">
+		<div class="tab-db" v-if="config.client.config.singleMode">
 			<el-tabs v-model="config.client.config.db"
 			         type="card"
 			         @tab-click="selectDb">
@@ -18,6 +18,7 @@
 			</el-tabs>
 		</div>
 		<div class="key-list"
+		     :style="config.client.config.singleMode ? 'top: 61px' : 'top: 33px'"
 		     v-show="config.client.store && config.client.store.length">
 			<template v-for="(item, i) in config.client.store">
 				<div class="key-item"

@@ -1,5 +1,9 @@
 <template>
-	<div class="viewport">
+	<div class="viewport"
+	     v-loading="config.loadingDb"
+	     element-loading-text="连接Redis..."
+	     element-loading-spinner="el-icon-loading"
+	     element-loading-background="rgba(0, 0, 0, 0.6)">
 		<ServerPanel :config="config"></ServerPanel>
 		<KeyPanel :config="config" ref="keyPanel"></KeyPanel>
 		<ValuePanel :config="config"></ValuePanel>
@@ -31,6 +35,8 @@
         config: {
           // 当前服务器索引
           index: null,
+          // 加载数据库动画
+          loadingDb: false,
           // 连接实例
           client: null,
           // 服务器信息编辑窗口

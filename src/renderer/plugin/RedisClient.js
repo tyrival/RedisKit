@@ -12,8 +12,11 @@
       }
       Message.error('连接服务器失败。')
     },
-    onError: Function
-  }
+     listeners: {
+        onInit: Function
+        onError: Function
+     }
+ }
  format: 'RAW'/'JSON' | 'RAW'
  databases: Array
  store: Array || []
@@ -24,7 +27,7 @@
     value: Object || null
     field: Object || null
     fieldValue: Object || null
-  }
+ }
  */
 // import Redis from 'ioredis'
 import {Message} from 'element-ui'
@@ -58,30 +61,41 @@ class RedisClient {
       if (times <= 2) {
         return 500
       }
+      this.eventHandler(this.config.listeners.onError, [this])
       Message.error('连接【' + this.config.name + '】失败，请检查服务器或网络。')
     }
-    if (this.config.singleMode) {
-      let server = this.config.cluster[0]
-      server.db = this.config.db
-      server.retryStrategy = retryStrategy
-      this.connection = new Redis(server)
-    } else {
-      let cluster = this.config.cluster
-      let options = {
-        clusterRetryStrategy: retryStrategy
-      }
-      if (this.config.nat && cluster && cluster.length) {
-        options.natMap = {}
-        for (let i = 0; i < cluster.length; i++) {
-          let server = cluster[i]
-          options.natMap[server.nat] = server
+    switch (this.config.singleMode) {
+      case true:
+        let server = this.config.cluster[0]
+        server.db = this.config.db
+        server.retryStrategy = retryStrategy
+        this.connection = new Redis(server)
+        this.eventHandler(this.config.listeners.onInit, [this])
+        break
+      case false:
+        let cluster = this.config.cluster
+        let options = {
+          clusterRetryStrategy: retryStrategy,
+          enableReadyCheck: true
         }
-      }
-      this.connection = new Redis.Cluster(cluster, options)
+        if (this.config.nat && cluster && cluster.length) {
+          options.natMap = {}
+          for (let i = 0; i < cluster.length; i++) {
+            let server = cluster[i]
+            options.natMap[server.nat] = server
+          }
+        }
+        this.connection = new Redis.Cluster(cluster, options)
+        this.connection.on('ready', () => {
+          this.loadStore(() => {
+            this.eventHandler(this.config.listeners.onInit, [this])
+          })
+        })
+        break
     }
     // 注册统一错误处理
     if (this.config.onError && typeof this.config.onError) {
-      this.connection.on('error', this.config.onError)
+      this.connection.on('error', this.config.listeners.onError)
     }
   }
 
@@ -104,7 +118,7 @@ class RedisClient {
         this.databases.push(i.toString())
       }
       this.config.db = null
-      this.doCallback(callback, [this.databases])
+      this.eventHandler(callback, [this.databases])
     })
   }
 
@@ -124,35 +138,84 @@ class RedisClient {
    * 加载数据key
    */
   loadStore (callback) {
-    if (!this.config.db) {
-      return
-    }
-    this.resetStore()
-    this.initConnection()
-    // 查询所有key
-    this.connection.keys(['*'], (_, reply) => {
-      if (!reply || !reply.length) {
-        return
-      }
-      // 遍历key，构造查询key对应的数据类型的命令
-      let client = this.connection.multi()
-      for (let i = 0; i < reply.length; i++) {
-        let key = reply[i]
-        client = client.type(key)
-      }
-      // 查询类型
-      client.exec((_, results) => {
-        let data = []
-        for (let i = 0; i < results.length; i++) {
-          data.push({
-            key: reply[i],
-            type: results[i][1]
-          })
+    switch (this.config.singleMode) {
+      case true:
+        if (!this.config.db) {
+          return
         }
-        this.store = data
-        this.doCallback(callback, [this.store])
-      })
-    })
+        this.resetStore()
+        this.initConnection()
+        // 查询所有key
+        this.connection.keys(['*'], (_, reply) => {
+          if (!reply || !reply.length) {
+            return
+          }
+          // 遍历key，构造查询key对应的数据类型的命令
+          let client = this.connection.multi()
+          for (let i = 0; i < reply.length; i++) {
+            let key = reply[i]
+            client = client.type(key)
+          }
+          // 查询类型
+          client.exec((_, results) => {
+            let data = []
+            for (let i = 0; i < results.length; i++) {
+              data.push({
+                key: reply[i],
+                type: results[i][1]
+              })
+            }
+            this.store = data
+            this.eventHandler(callback, [this.store])
+          })
+        })
+        break
+      case false:
+        let masters = this.connection.nodes('master')
+        Promise.all(masters.map(function (node) {
+          return node.keys(['*'])
+        })).then((keys) => {
+          let count = 0
+          let keyList = []
+          let promiseArray = []
+          if (keys && keys.length) {
+            for (let i = 0; i < keys.length; i++) {
+              let keyArr = keys[i]
+              if (!keyArr || !keyArr.length) {
+                continue
+              }
+              for (let j = 0; j < keyArr.length; j++) {
+                let key = keyArr[j]
+                promiseArray.push(masters[i].type(key))
+                keyList.push(key)
+                count++
+              }
+            }
+          }
+          if (!count) {
+            Message('未查询到任何key。')
+          } else {
+            Promise.all(promiseArray)
+              .then((types) => {
+                let data = []
+                for (let i = 0; i < keyList.length; i++) {
+                  data.push({
+                    key: keyList[i],
+                    type: types[i]
+                  })
+                }
+                this.store = data
+                this.eventHandler(callback, [this.store])
+              })
+              .catch(() => {
+                this.eventHandler(callback, [this.store])
+              })
+          }
+        }).catch(() => {
+          this.eventHandler(callback, [this.store])
+        })
+        break
+    }
   }
 
   /**
@@ -168,35 +231,35 @@ class RedisClient {
         this.connection.get(this.model.key).then((result) => {
           this.model.value = result
           this.model.fieldValue = this.formatValue(result)
-          this.doCallback(callback, [result])
+          this.eventHandler(callback, [result])
         })
         break
       case 'hash':
         this.connection.hgetall(this.model.key).then((result) => {
           this.model.value = result
-          this.doCallback(callback, [result])
+          this.eventHandler(callback, [result])
         })
         break
       case 'list':
         this.connection.lrange(this.model.key, 0, -1).then((result) => {
           this.model.value = result
-          this.doCallback(callback, [result])
+          this.eventHandler(callback, [result])
         })
         break
       case 'set':
         this.connection.smembers(this.model.key).then((result) => {
           this.model.value = result
-          this.doCallback(callback, [result])
+          this.eventHandler(callback, [result])
         })
         break
       case 'zset':
         this.connection.zrange(this.model.key, 0, -1, 'withscores').then((result) => {
           this.model.value = result
-          this.doCallback(callback, [result])
+          this.eventHandler(callback, [result])
         })
         break
       default:
-        this.doCallback(callback)
+        this.eventHandler(callback)
         break
     }
   }
@@ -209,7 +272,7 @@ class RedisClient {
   selectKey (index, callback) {
     this.resetModel()
     if (index === null || index === undefined) {
-      this.doCallback(callback)
+      this.eventHandler(callback)
       return
     }
     this.model.index = index
@@ -269,7 +332,7 @@ class RedisClient {
       }
       client.rename(oldKey, newKey, (err, result) => {
         this.loadStore()
-        this.doCallback(callback, [err, result])
+        this.eventHandler(callback, [err, result])
       })
     })
   }
@@ -324,7 +387,7 @@ class RedisClient {
         } else {
           this.connection.zrevrange(this.model.key, 0, -1, 'withscores', (_, result) => {
             this.model.value = result
-            this.doCallback(callback, [isAsc])
+            this.eventHandler(callback, [isAsc])
           })
         }
         break
@@ -348,7 +411,7 @@ class RedisClient {
     this.connection.hset(this.model.key, field, value)
       .then(() => {
         this.loadValue()
-        this.doCallback(callback, [this.model, field, value])
+        this.eventHandler(callback, [this.model, field, value])
       })
   }
 
@@ -371,7 +434,7 @@ class RedisClient {
             delete this.model.value[this.model.field]
             this.model.value[field] = this.model.fieldValue
             this.model.field = field
-            this.doCallback(callback, [this.model, field])
+            this.eventHandler(callback, [this.model, field])
           })
       })
   }
@@ -396,7 +459,7 @@ class RedisClient {
     }
     this.connection.hdel(this.model.key, this.model.field, () => {
       this.loadValue()
-      this.doCallback(callback, [this.model, field])
+      this.eventHandler(callback, [this.model, field])
     })
   }
 
@@ -411,13 +474,13 @@ class RedisClient {
       this.connection.lpush(this.model.key, item)
         .then(() => {
           this.model.value.unshift(item)
-          this.doCallback(callback, [this.model, item])
+          this.eventHandler(callback, [this.model, item])
         })
     } else {
       this.connection.rpush(this.model.key, item)
         .then(() => {
           this.model.value.push(item)
-          this.doCallback(callback, [this.model, item])
+          this.eventHandler(callback, [this.model, item])
         })
     }
   }
@@ -437,7 +500,7 @@ class RedisClient {
       .lrem(this.model.key, 0, val)
       .exec(() => {
         this.model.value.splice(index, 1)
-        this.doCallback(callback, [this.model, index])
+        this.eventHandler(callback, [this.model, index])
       })
   }
 
@@ -455,7 +518,7 @@ class RedisClient {
     this.connection.sadd(this.model.key, item)
       .then(() => {
         this.model.value.push(item)
-        this.doCallback(callback, [this.model, item])
+        this.eventHandler(callback, [this.model, item])
       })
   }
 
@@ -492,7 +555,7 @@ class RedisClient {
             break
           }
         }
-        this.doCallback(callback, [this.model, item])
+        this.eventHandler(callback, [this.model, item])
       }
     })
   }
@@ -512,10 +575,10 @@ class RedisClient {
       .then(() => {
         this.model.value.push(item)
         this.model.value.push(0)
-        this.doCallback(callback, [this.model, item])
+        this.eventHandler(callback, [this.model, item])
       })
       .catch(() => {
-        this.doCallback(callback, [this.model, item])
+        this.eventHandler(callback, [this.model, item])
       })
   }
 
@@ -552,7 +615,7 @@ class RedisClient {
           }
         }
       }
-      this.doCallback(callback, [this.model, item])
+      this.eventHandler(callback, [this.model, item])
     })
   }
 
@@ -571,7 +634,7 @@ class RedisClient {
         .zadd(this.model.key, score, field)
         .exec(() => {
           this.loadValue()
-          this.doCallback(callback, [this.model, score])
+          this.eventHandler(callback, [this.model, score])
         })
     }
   }
@@ -581,7 +644,7 @@ class RedisClient {
    */
   loadExpire (key, callback) {
     this.connection.ttl(key, (_, result) => {
-      this.doCallback(callback, [key, result])
+      this.eventHandler(callback, [key, result])
     })
   }
 
@@ -590,7 +653,7 @@ class RedisClient {
    */
   setExpire (key, second, callback) {
     this.connection.expire(key, second, () => {
-      this.doCallback(callback, [this.model, key, second])
+      this.eventHandler(callback, [this.model, key, second])
     })
   }
 
@@ -601,7 +664,7 @@ class RedisClient {
    */
   removeExpire (key, callback) {
     this.connection.persist(key, (_, result) => {
-      this.doCallback(callback, [key, result])
+      this.eventHandler(callback, [key, result])
     })
   }
 
@@ -617,19 +680,19 @@ class RedisClient {
       case 'string':
         client.set(key, fieldValue, (error, result) => {
           this.loadValue()
-          this.doCallback(callback, [error, result])
+          this.eventHandler(callback, [error, result])
         })
         break
       case 'hash':
         client.hset(key, this.model.field, fieldValue, (error, result) => {
           this.loadValue()
-          this.doCallback(callback, [error, result])
+          this.eventHandler(callback, [error, result])
         })
         break
       case 'list':
         client.lset(key, this.model.field, fieldValue, (error, result) => {
           this.loadValue()
-          this.doCallback(callback, [error, result])
+          this.eventHandler(callback, [error, result])
         })
         break
       case 'set':
@@ -643,7 +706,7 @@ class RedisClient {
             .sadd(key, fieldValue)
             .exec((error, result) => {
               this.loadValue()
-              this.doCallback(callback, [error, result])
+              this.eventHandler(callback, [error, result])
             })
         })
         break
@@ -654,7 +717,7 @@ class RedisClient {
           .zadd(key, score, fieldValue)
           .exec((error, result) => {
             this.loadValue()
-            this.doCallback(callback, [error, result])
+            this.eventHandler(callback, [error, result])
           })
         break
       default:
@@ -710,7 +773,7 @@ class RedisClient {
     this.model.fieldValue = null
   }
 
-  doCallback (callback, args) {
+  eventHandler (callback, args) {
     if (callback && typeof callback === 'function') {
       callback.apply(this, args)
     }

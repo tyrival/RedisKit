@@ -3,5 +3,8 @@
 .el-message {
   &.el-message--info {
     border-color: $global-main-color;
+    .el-message__content {
+      color: $global-font-color;
+    }
   }
 }

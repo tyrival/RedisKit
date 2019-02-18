@@ -115,23 +115,22 @@
         if (this.config.index === index) {
           return
         }
+        this.config.loadingDb = true
         // 选中服务器
         this.config.index = index
         let server = this.config.servers[index]
+        server.listeners = {
+          onInit: () => {
+            this.config.loadingDb = false
+          },
+          onError: () => {
+            this.config.loadingDb = false
+            this.config.index = null
+          }
+        }
         this.config.client = new RedisClient(server)
         if (this.config.client.config.singleMode) {
-          this.config.client.loadDatabases((databases) => {
-            this.$set(this.config.client, 'databases', databases)
-          })
-        } else {
-          debugger
-          this.config.client.connection.set('foo', 'bar1', (_, res) => {
-            console.log(res)
-          })
-          this.config.client.connection.get('foo', function (_, res) {
-            // res === 'bar'
-            console.log(res)
-          })
+          this.config.client.loadDatabases()
         }
       },
       /**
