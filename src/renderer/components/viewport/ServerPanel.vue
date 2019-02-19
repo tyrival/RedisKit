@@ -119,13 +119,16 @@
         // 选中服务器
         this.config.index = index
         let server = this.config.servers[index]
-        server.listeners = {
-          onInit: () => {
+        server.events = {
+          init: () => {
             this.config.loadingDb = false
           },
-          onError: () => {
+          error: (err, _) => {
+            debugger
+            console.log(err)
             this.config.loadingDb = false
             this.config.index = null
+            this.config.client = null
           }
         }
         this.config.client = new RedisClient(server)
