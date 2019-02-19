@@ -75,9 +75,7 @@
        * @param event
        */
       selectDb (tab, event) {
-        this.config.client.selectDatabase(tab.index, (store) => {
-          this.$set(this.config.client, 'store', store)
-        })
+        this.config.client.selectDatabase(tab.index)
       },
       /**
        * 选中key

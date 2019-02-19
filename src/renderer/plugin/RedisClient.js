@@ -162,7 +162,7 @@ class RedisClient {
             client = client.type(key)
           }
           // 查询类型
-          client.exec((_, results) => {
+          client.exec((err, results) => {
             let data = []
             for (let i = 0; i < results.length; i++) {
               data.push({
@@ -172,6 +172,7 @@ class RedisClient {
             }
             this.store = data
             this.cancelLoading()
+            this.handlerCallback(callback, [err, results])
           })
         })
         break

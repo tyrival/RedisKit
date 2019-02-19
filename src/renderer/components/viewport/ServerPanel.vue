@@ -123,6 +123,8 @@
           init: (err, _) => {
             this.config.loadingDb = false
             if (err) {
+              this.config.index = null
+              this.config.client = null
               this.$message({message: err.message, type: 'error', duration: 1000})
             }
           },
