@@ -120,15 +120,19 @@
         this.config.index = index
         let server = this.config.servers[index]
         server.events = {
-          init: () => {
+          init: (err, _) => {
             this.config.loadingDb = false
+            if (err) {
+              this.$message({message: err.message, type: 'error', duration: 1000})
+            }
           },
           error: (err, _) => {
-            debugger
-            console.log(err)
             this.config.loadingDb = false
             this.config.index = null
             this.config.client = null
+            if (err) {
+              this.$message({message: err.message, type: 'error', duration: 1000})
+            }
           }
         }
         this.config.client = new RedisClient(server)

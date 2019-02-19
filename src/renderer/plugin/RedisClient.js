@@ -64,8 +64,7 @@ class RedisClient {
       if (times <= 2) {
         return 500
       }
-      this.emitEvent('error', ['连接失败', this])
-      Message.error('连接【' + this.config.name + '】失败，请检查服务器或网络。')
+      this.emitEvent('error', ['连接【' + this.config.name + '】失败，请检查服务器或网络。', this])
     }
     switch (this.config.singleMode) {
       case true:
@@ -73,7 +72,7 @@ class RedisClient {
         server.db = this.config.db
         server.retryStrategy = retryStrategy
         this.connection = new Redis(server)
-        this.emitEvent('init', [this])
+        this.emitEvent('init')
         break
       case false:
         let cluster = this.config.cluster
@@ -90,16 +89,14 @@ class RedisClient {
         }
         this.connection = new Redis.Cluster(cluster, options)
         this.connection.on('ready', () => {
-          this.loadStore(() => {
-            this.emitEvent('init', [this])
-          })
+          this.loadStore(this.config.events.init)
         })
         break
     }
     // 注册统一错误处理
     if (this.config.error && typeof this.config.error) {
       this.connection.on('error', (err) => {
-        this.emitEvent('error', [err, this])
+        this.emitEvent('error', [err, null])
       })
     }
   }
@@ -112,7 +109,7 @@ class RedisClient {
     this.startLoading()
     this.databases = []
     // 获取数据库列表
-    this.connection.config(['get', 'databases'], (_, reply) => {
+    this.connection.config(['get', 'databases'], (err, reply) => {
       if (!reply) {
         return
       }
@@ -125,7 +122,7 @@ class RedisClient {
       }
       this.config.db = null
       this.cancelLoading()
-      this.handlerCallback(callback, [this.databases])
+      this.handlerCallback(callback, [err, reply])
     })
   }
 
@@ -175,7 +172,6 @@ class RedisClient {
             }
             this.store = data
             this.cancelLoading()
-            this.handlerCallback(callback, [this.store])
           })
         })
         break
@@ -215,16 +211,16 @@ class RedisClient {
                 }
                 this.store = data
                 this.cancelLoading()
-                this.handlerCallback(callback, [this.store])
+                this.handlerCallback(callback, [null, types])
               })
-              .catch(() => {
+              .catch((err) => {
                 this.cancelLoading()
-                this.handlerCallback(callback, [this.store])
+                this.handlerCallback(callback, [err, null])
               })
           }
-        }).catch(() => {
+        }).catch((err) => {
           this.cancelLoading()
-          this.handlerCallback(callback, [this.store])
+          this.handlerCallback(callback, [err, null])
         })
         break
     }
@@ -245,35 +241,35 @@ class RedisClient {
           this.model.value = result
           this.model.fieldValue = this.formatValue(result)
           this.cancelLoading()
-          this.handlerCallback(callback, [result])
+          this.handlerCallback(callback, [null, result])
         })
         break
       case 'hash':
         this.connection.hgetall(this.model.key).then((result) => {
           this.model.value = result
           this.cancelLoading()
-          this.handlerCallback(callback, [result])
+          this.handlerCallback(callback, [null, result])
         })
         break
       case 'list':
         this.connection.lrange(this.model.key, 0, -1).then((result) => {
           this.model.value = result
           this.cancelLoading()
-          this.handlerCallback(callback, [result])
+          this.handlerCallback(callback, [null, result])
         })
         break
       case 'set':
         this.connection.smembers(this.model.key).then((result) => {
           this.model.value = result
           this.cancelLoading()
-          this.handlerCallback(callback, [result])
+          this.handlerCallback(callback, [null, result])
         })
         break
       case 'zset':
         this.connection.zrange(this.model.key, 0, -1, 'withscores').then((result) => {
           this.model.value = result
           this.cancelLoading()
-          this.handlerCallback(callback, [result])
+          this.handlerCallback(callback, [null, result])
         })
         break
       default:
@@ -404,9 +400,9 @@ class RedisClient {
         if (isAsc) {
           this.loadValue()
         } else {
-          this.connection.zrevrange(this.model.key, 0, -1, 'withscores', (_, result) => {
+          this.connection.zrevrange(this.model.key, 0, -1, 'withscores', (err, result) => {
             this.model.value = result
-            this.handlerCallback(callback, [isAsc])
+            this.handlerCallback(callback, [err, result])
           })
         }
         break
@@ -428,9 +424,9 @@ class RedisClient {
     }
     let value = ''
     this.connection.hset(this.model.key, field, value)
-      .then(() => {
+      .then((result) => {
         this.loadValue()
-        this.handlerCallback(callback, [this.model, field, value])
+        this.handlerCallback(callback, [null, result])
       })
   }
 
@@ -449,11 +445,11 @@ class RedisClient {
         this.connection.multi()
           .hset(this.model.key, field, this.model.fieldValue)
           .hdel(this.model.key, this.model.field)
-          .exec(() => {
+          .exec((results) => {
             delete this.model.value[this.model.field]
             this.model.value[field] = this.model.fieldValue
             this.model.field = field
-            this.handlerCallback(callback, [this.model, field])
+            this.handlerCallback(callback, [null, results])
           })
       })
   }
@@ -476,9 +472,9 @@ class RedisClient {
     if (field === undefined || field === null) {
       return
     }
-    this.connection.hdel(this.model.key, this.model.field, () => {
+    this.connection.hdel(this.model.key, this.model.field, (err, result) => {
       this.loadValue()
-      this.handlerCallback(callback, [this.model, field])
+      this.handlerCallback(callback, [err, result])
     })
   }
 
@@ -491,15 +487,15 @@ class RedisClient {
     let item = 'item'
     if (isPrepend) {
       this.connection.lpush(this.model.key, item)
-        .then(() => {
+        .then((result) => {
           this.model.value.unshift(item)
-          this.handlerCallback(callback, [this.model, item])
+          this.handlerCallback(callback, [null, result])
         })
     } else {
       this.connection.rpush(this.model.key, item)
-        .then(() => {
+        .then((result) => {
           this.model.value.push(item)
-          this.handlerCallback(callback, [this.model, item])
+          this.handlerCallback(callback, [null, result])
         })
     }
   }
@@ -517,9 +513,9 @@ class RedisClient {
     this.connection.multi()
       .lset(this.model.key, index, val)
       .lrem(this.model.key, 0, val)
-      .exec(() => {
+      .exec((err, results) => {
         this.model.value.splice(index, 1)
-        this.handlerCallback(callback, [this.model, index])
+        this.handlerCallback(callback, [err, results])
       })
   }
 
@@ -535,9 +531,9 @@ class RedisClient {
       index++
     }
     this.connection.sadd(this.model.key, item)
-      .then(() => {
+      .then((result) => {
         this.model.value.push(item)
-        this.handlerCallback(callback, [this.model, item])
+        this.handlerCallback(callback, [null, result])
       })
   }
 
@@ -565,7 +561,7 @@ class RedisClient {
       return
     }
     let set = this.model.value
-    this.connection.srem(this.model.key, item).then(() => {
+    this.connection.srem(this.model.key, item).then((result) => {
       if (set && set.length) {
         for (let i = 0; i < set.length; i++) {
           let ele = set[i]
@@ -574,7 +570,7 @@ class RedisClient {
             break
           }
         }
-        this.handlerCallback(callback, [this.model, item])
+        this.handlerCallback(callback, [null, result])
       }
     })
   }
@@ -591,13 +587,13 @@ class RedisClient {
       index++
     }
     this.connection.zadd(this.model.key, 0, item)
-      .then(() => {
+      .then((results) => {
         this.model.value.push(item)
         this.model.value.push(0)
-        this.handlerCallback(callback, [this.model, item])
+        this.handlerCallback(callback, [null, results])
       })
-      .catch(() => {
-        this.handlerCallback(callback, [this.model, item])
+      .catch((err) => {
+        this.handlerCallback(callback, [err, null])
       })
   }
 
@@ -624,7 +620,7 @@ class RedisClient {
     if (item === undefined || item === null) {
       return
     }
-    this.connection.zrem(this.model.key, item).then(() => {
+    this.connection.zrem(this.model.key, item).then((result) => {
       if (this.model.value && this.model.value.length) {
         for (let i = 0; i < this.model.value.length; i++) {
           let ele = this.model.value[i]
@@ -634,7 +630,9 @@ class RedisClient {
           }
         }
       }
-      this.handlerCallback(callback, [this.model, item])
+      this.handlerCallback(callback, [null, result])
+    }).catch((err) => {
+      this.handlerCallback(callback, [err, null])
     })
   }
 
@@ -651,9 +649,9 @@ class RedisClient {
       this.connection.multi()
         .zrem(this.model.key, field)
         .zadd(this.model.key, score, field)
-        .exec(() => {
+        .exec((err, results) => {
           this.loadValue()
-          this.handlerCallback(callback, [this.model, score])
+          this.handlerCallback(callback, [err, results])
         })
     }
   }
@@ -662,8 +660,8 @@ class RedisClient {
    * 获取过期时间
    */
   loadExpire (key, callback) {
-    this.connection.ttl(key, (_, result) => {
-      this.handlerCallback(callback, [key, result])
+    this.connection.ttl(key, (err, result) => {
+      this.handlerCallback(callback, [err, result])
     })
   }
 
@@ -671,8 +669,8 @@ class RedisClient {
    * 设置过期时间，单位：秒
    */
   setExpire (key, second, callback) {
-    this.connection.expire(key, second, () => {
-      this.handlerCallback(callback, [this.model, key, second])
+    this.connection.expire(key, second, (err, result) => {
+      this.handlerCallback(callback, [err, result])
     })
   }
 
@@ -682,8 +680,8 @@ class RedisClient {
    * @param callback
    */
   removeExpire (key, callback) {
-    this.connection.persist(key, (_, result) => {
-      this.handlerCallback(callback, [key, result])
+    this.connection.persist(key, (err, result) => {
+      this.handlerCallback(callback, [err, result])
     })
   }
 
