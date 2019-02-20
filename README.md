@@ -39,7 +39,7 @@ RedisKit是一款基于Electron、Vue、NodeJS开发的Redis GUI客户端，前�
 
 ### 安装程序
 
-- [Mac OS](https://github.com/tyrival/RedisKit/releases/download/v1.0.0/RedisKit-1.0.0.dmg)
+- [Mac OS](https://github.com/tyrival/RedisKit/releases/download/v1.1.0/RedisKit-1.1.0.dmg)
 
 - Windows (暂不提供，可自行编译)
 - Linux (暂不提供，可自行编译)
