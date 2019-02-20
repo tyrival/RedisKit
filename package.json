@@ -57,6 +57,7 @@
     "echarts": "^4.1.0",
     "element-ui": "^2.5.4",
     "ioredis": "^4.6.2",
+    "lodash": "^4.17.11",
     "nedb": "^1.8.0",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",

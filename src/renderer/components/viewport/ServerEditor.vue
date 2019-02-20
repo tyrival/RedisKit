@@ -5,7 +5,7 @@
 	           :close-on-click-modal="false"
 	           :close-on-press-escape="false"
 	           :visible.sync="config.serverEditor.show"
-	           :width="config.serverEditor.model.singleMode ? '35%' : '75%'">
+	           :width="config.serverEditor.model.singleMode ? '35%' : '80%'">
 		<el-form :model="config.serverEditor.model"
 		         label-width="60px"
 		         size="mini"

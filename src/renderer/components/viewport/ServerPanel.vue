@@ -37,8 +37,9 @@
 </template>
 
 <script>
-  import RedisClient from '../../plugin/RedisClient'
   import '../../assets/styles/viewport/server-panel.scss'
+  import RedisClient from '../../plugin/RedisClient'
+  import _ from 'lodash'
 
   export default {
     name: 'ServerPanel',
@@ -104,8 +105,7 @@
       editServer (index, e) {
         e.stopPropagation()
         this.config.serverEditor.index = index
-        let model = this.config.servers[index]
-        this.$set(this.config.serverEditor, 'model', model)
+        let model = _.cloneDeep(this.config.servers[index])
         this.$set(this.config.serverEditor, 'model', model)
         this.showEditor()
       },
