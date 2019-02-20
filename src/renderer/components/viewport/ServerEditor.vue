@@ -49,12 +49,12 @@
 								<el-input v-model="node.host" autocomplete="off" placeholder="localhost" clearable></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="config.serverEditor.model.nat ? 4 : 5">
+						<el-col :span="5">
 							<el-form-item label="端口">
 								<el-input v-model="node.port" autocomplete="off" placeholder="6379"></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="config.serverEditor.model.nat ? 6 : 9">
+						<el-col :span="config.serverEditor.model.nat ? 5 : 9">
 							<el-form-item label="密码">
 								<el-input v-model="node.password" autocomplete="off" clearable></el-input>
 							</el-form-item>
