@@ -64,7 +64,9 @@ class RedisClient {
       if (times <= 2) {
         return 500
       }
-      this.emitEvent('error', ['连接【' + this.config.name + '】失败，请检查服务器或网络。', this])
+      this.emitEvent('error',
+        [{message: '连接【' + this.config.name + '】失败，请检查服务器或网络。'}, this]
+      )
     }
     switch (this.config.singleMode) {
       case true:
@@ -761,6 +763,15 @@ class RedisClient {
       this.format = 'RAW'
       return value
     }
+  }
+
+  /**
+   * 获取服务器性能
+   */
+  info (callback) {
+    this.connection.info((_, result) => {
+      this.handlerCallback(callback, [_, result])
+    })
   }
 
   startLoading () {

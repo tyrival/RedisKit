@@ -13,6 +13,7 @@
 		<KeyNameEditor :config="config"></KeyNameEditor>
 		<KeyDuplicateEditor :config="config"></KeyDuplicateEditor>
 		<KeyContextMenu :config="config"></KeyContextMenu>
+		<Dashboard :config="config"></Dashboard>
 	</div>
 </template>
 
@@ -27,6 +28,7 @@
   import KeyNameEditor from './viewport/KeyNameEditor'
   import KeyDuplicateEditor from './viewport/KeyDuplicateEditor'
   import KeyContextMenu from './viewport/KeyContextMenu'
+  import Dashboard from './viewport/Dashboard'
 
   export default {
     name: 'Viewport',
@@ -73,6 +75,30 @@
             index: null,
             style: {top: 0, left: 0}
           },
+          // 服务器性能面板
+          dashboard: {
+            show: false,
+            thread: null,
+            state: {
+              time: [],
+              // cpu
+              used_cpu_sys: [],
+              used_cpu_user: [],
+              used_cpu_sys_children: [],
+              used_cpu_user_children: [],
+              // ram
+              used_memory_rss: [],
+              used_memory: [],
+              used_memory_lua: [],
+              // network
+              instantaneous_input_kbps: [],
+              instantaneous_output_kbps: [],
+              instantaneous_ops_per_sec: [],
+              // cmd
+              keyspace_hits: [],
+              keyspace_misses: []
+            }
+          },
           // 服务器信息列表
           servers: null
         }
@@ -92,7 +118,8 @@
       'ExpireEditor': ExpireEditor,
       'KeyNameEditor': KeyNameEditor,
       'KeyDuplicateEditor': KeyDuplicateEditor,
-      'KeyContextMenu': KeyContextMenu
+      'KeyContextMenu': KeyContextMenu,
+      'Dashboard': Dashboard
     }
   }
 </script>

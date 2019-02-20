@@ -1,5 +1,7 @@
 <template>
-	<div class="value-panel" v-if="showValuePanel()">
+	<div class="value-panel"
+	     v-if="showValuePanel()"
+	     :style="config.dashboard.show ? 'bottom: 150px' : ''">
 		<div class="header" v-if="config.client && config.client.format">
 			<el-button type="primary" @click="saveValue">保 存</el-button>
 			<el-select v-model="config.client.format">

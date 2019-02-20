@@ -1,0 +1,19 @@
+@import '../common/theme/index';
+@import './variables';
+
+.dashboard {
+  position: absolute;
+  height: $dashboard-height;
+  left: $server-panel-width + $key-panel-width;
+  right: 0;
+  bottom: 0;
+  border-top: 2px solid $global-main-color;
+  background-color: $global-bg-color-secondary;
+  overflow: hidden;
+
+  .chart-block {
+    width: 100%;
+    height: $dashboard-height;
+  }
+
+}
