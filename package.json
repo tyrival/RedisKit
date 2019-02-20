@@ -1,6 +1,6 @@
 {
   "name": "RedisKit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "tyrival <tyrival@qq.com>",
   "description": "Redis management app.",
   "license": null,
