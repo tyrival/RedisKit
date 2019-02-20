@@ -10,6 +10,7 @@
   border-top: 2px solid $global-main-color;
   background-color: $global-bg-color-secondary;
   overflow: hidden;
+  z-index: 1;
 
   .chart-block {
     width: 100%;
