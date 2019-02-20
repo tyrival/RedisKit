@@ -13,7 +13,7 @@ RedisKit是一款基于Electron、Vue、NodeJS开发的Redis GUI客户端，前�
 1. 增加了redis cluster集群管理功能（非Sentinel模式）；
 2. 增加了性能监控功能。
 
-##### v1.0.0
+##### v1.0.0
 
 基本的服务器管理、数据的增删改查功能。
 
