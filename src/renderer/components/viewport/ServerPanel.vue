@@ -70,6 +70,7 @@
       removeServer () {
         let index = this.config.index
         if (index === null || index === undefined) {
+          this.$message({message: '未选中任何服务器', type: 'error', duration: 1000})
           return
         }
         this.$confirm('是否确定删除', '提示', {
