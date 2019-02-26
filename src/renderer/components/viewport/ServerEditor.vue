@@ -17,7 +17,9 @@
 					<el-radio :label="false">集群</el-radio>
 				</el-radio-group>
 			</el-form-item>
-			<el-form-item label="名称" prop="name">
+			<el-form-item :class="config.serverEditor.model.singleMode ? '' : 'el-col-23'"
+			              label="名称"
+			              prop="name">
 				<el-input v-model="config.serverEditor.model.name" autocomplete="off" clearable></el-input>
 			</el-form-item>
 			<template v-if="config.serverEditor.model.singleMode">
