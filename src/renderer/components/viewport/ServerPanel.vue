@@ -15,12 +15,19 @@
 				     @mouseover="mouseoverIndex = i"
 				     @mouseout="mouseoverIndex = null"
 				     @click="selectServer(i, $event)">
-					<el-col :span="18">{{item.name}}</el-col>
-					<el-col :span="6">
+					<el-col :span="16">{{item.name}}</el-col>
+					<el-col :span="8">
 						<el-button type="text"
 						           size="mini"
 						           v-show="mouseoverIndex === i"
-						           @click="editServer(i, $event)">编辑
+						           @click="editServer(i, $event)">
+							<i class="icon iconfont icon-edit"></i>
+						</el-button>
+						<el-button type="text"
+						           size="mini"
+						           v-show="mouseoverIndex === i"
+						           @click="deleteServer(i, $event)">
+							<i class="icon iconfont icon-cross"></i>
 						</el-button>
 					</el-col>
 				</div>
@@ -60,16 +67,26 @@
         if (this.filterWord === null || this.filterWord === undefined) {
           return true
         }
-        if (item.name.indexOf(this.filterWord) >= 0) {
+        if (item.name.toLowerCase().indexOf(this.filterWord.toLowerCase()) >= 0) {
           return true
         }
         return false
       },
       /**
+       * 删除服务器信息
+       */
+      deleteServer (i, e) {
+        e.stopPropagation()
+        this.removeServer(i)
+      },
+      /**
        * 移除服务器信息
        */
-      removeServer () {
-        let index = this.config.index
+      removeServer (i) {
+        let index = i
+        if (index === null || index === undefined) {
+          index = this.config.index
+        }
         if (index === null || index === undefined) {
           this.$message({message: '未选中任何服务器', type: 'error', duration: 1000})
           return

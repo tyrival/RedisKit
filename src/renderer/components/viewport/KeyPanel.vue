@@ -64,7 +64,7 @@
         if (this.filterWord === null || this.filterWord === undefined) {
           return true
         }
-        if (item.key.indexOf(this.filterWord) >= 0) {
+        if (item.key.toLowerCase().indexOf(this.filterWord.toLowerCase()) >= 0) {
           return true
         }
         return false
