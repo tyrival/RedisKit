@@ -3,7 +3,8 @@
 	     v-loading="config.loadingDb"
 	     element-loading-text="连接Redis..."
 	     element-loading-spinner="el-icon-loading"
-	     element-loading-background="rgba(0, 0, 0, 0.6)">
+	     element-loading-background="rgba(0, 0, 0, 0.6)"
+	     :style="calcStyle">>
 		<ServerPanel :config="config"></ServerPanel>
 		<KeyPanel :config="config" ref="keyPanel"></KeyPanel>
 		<ValuePanel :config="config"></ValuePanel>
@@ -19,6 +20,7 @@
 
 <script>
   import '../assets/styles/viewport/main.scss'
+  import OSUtils from '../utils/OSUtils'
   import ServerPanel from './viewport/ServerPanel'
   import KeyPanel from './viewport/KeyPanel'
   import ValuePanel from './viewport/ValuePanel'
@@ -108,6 +110,11 @@
       this.$db.find({}, (_, docs) => {
         this.config.servers = docs
       })
+    },
+    computed: {
+      calcStyle () {
+        return OSUtils.getOsInfo().name === 'Mac' ? 'top:22px' : 'top:0'
+      }
     },
     components: {
       'ServerPanel': ServerPanel,

@@ -1,13 +1,20 @@
 <template>
 	<div id="app">
-		<div class="title">RedisKit</div>
+		<div v-if="showTitle" class="title">RedisKit</div>
 		<router-view></router-view>
 	</div>
 </template>
 
 <script>
+  import OSUtils from './utils/OSUtils'
+
   export default {
-    name: 'RedisKit'
+    name: 'RedisKit',
+    computed: {
+      showTitle () {
+        return OSUtils.getOsInfo().name === 'Mac'
+      }
+    }
   }
 </script>
 

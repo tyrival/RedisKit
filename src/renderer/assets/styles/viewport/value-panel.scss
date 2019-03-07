@@ -5,7 +5,7 @@ $header-height: 32px;
 $menu-height: 24px;
 .value-panel {
   position: absolute;
-  top: $title-height + 1;
+  top: 1px;
   left: $server-panel-width + $key-panel-width;
   right: 0;
   bottom: 0;
