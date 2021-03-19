@@ -25,9 +25,19 @@ $menu-height: 24px;
       line-height: $header-height;
       border-radius: 0;
     }
-
+    .el-input.key-container {
+      position: absolute;
+      .el-input__inner{
+        height: $header-height;
+        line-height: $header-height;
+        border-radius: 0;
+        padding: 0 8px;
+        width: calc(100% - 140px);
+      }
+    }
     .el-select {
-      float: right;
+      position: absolute;
+      right: 0px;
 
       .el-input {
         .el-input__inner {

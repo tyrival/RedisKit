@@ -4,6 +4,7 @@
 	     :style="config.dashboard.show ? 'bottom: 150px' : ''">
 		<div class="header" v-if="config.client && config.client.format">
 			<el-button type="primary" @click="saveValue">保 存</el-button>
+            <el-input class="key-container" :value="config.client.model.key"></el-input>
 			<el-select v-model="config.client.format">
 				<el-option v-for="(item, i) in dataFormat"
 				           :key="item"
