@@ -17,12 +17,10 @@
 					<el-radio :label="false">集群</el-radio>
 				</el-radio-group>
 			</el-form-item>
-			<el-form-item :class="config.serverEditor.model.singleMode ? '' : 'el-col-23'"
-			              label="名称"
-			              prop="name">
-				<el-input v-model="config.serverEditor.model.name" autocomplete="off" clearable></el-input>
-			</el-form-item>
 			<template v-if="config.serverEditor.model.singleMode">
+                <el-form-item label="名称" prop="name">
+                    <el-input v-model="config.serverEditor.model.name" autocomplete="off" clearable></el-input>
+                </el-form-item>
 				<el-form-item label="服务器">
 					<el-input v-model="config.serverEditor.model.cluster[0].host"
 					          autocomplete="off"
@@ -40,6 +38,11 @@
 				</el-form-item>
 			</template>
 			<template v-else>
+                <el-form-item label="名称" prop="name">
+                    <div :class="'el-col-23'">
+                        <el-input v-model="config.serverEditor.model.name" autocomplete="off" clearable></el-input>
+                    </div>
+                </el-form-item>
 				<el-form-item label="NAT">
 					<el-switch active-text="" v-model="config.serverEditor.model.nat">
 					</el-switch>

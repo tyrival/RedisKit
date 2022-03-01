@@ -44,7 +44,7 @@ class RedisClient {
     this.resetModel()
     this.databases = []
     this.store = []
-    this.format = 'RAW'
+    this.format = 'JSON'
     this.loading = {show: false, message: ''}
     this.config = config
     for (let i = 0; i < this.config.cluster.length; i++) {
@@ -760,7 +760,7 @@ class RedisClient {
           return JSON.stringify(JSON.parse(value))
       }
     } catch (e) {
-      this.format = 'RAW'
+      this.format = 'JSON'
       return value
     }
   }

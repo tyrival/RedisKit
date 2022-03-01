@@ -125,7 +125,7 @@
        * 增加数据
        */
       addKey () {
-        if (!this.config.client.config.db) {
+        if (this.config.client.config.singleMode && !this.config.client.config.db) {
           this.$message({message: '请先选择数据库。', type: 'error', duration: 1000})
           return
         }
@@ -199,7 +199,7 @@
        * 刷新key
        */
       refreshKey () {
-        if (!this.config.client.config.db) {
+        if (this.config.client.config.singleMode && !this.config.client.config.db) {
           this.$message({message: '请先选择数据库。', type: 'error', duration: 1000})
           return
         }

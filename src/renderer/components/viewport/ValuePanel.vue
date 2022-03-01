@@ -181,7 +181,7 @@
         // 排序方式，只对zset有效
         order: 1,
         // 数据显示格式
-        dataFormat: ['RAW', 'JSON']
+        dataFormat: ['JSON', 'RAW']
       }
     },
     methods: {
